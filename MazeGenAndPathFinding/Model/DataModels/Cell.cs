@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MazeGenAndPathFinding.Model.DataModels
 {
     public class Cell
     {
-        public Wall North { get; set; }
-        public Wall South { get; set; }
-        public Wall East { get; set; }
-        public Wall West { get; set; }
+        public Dictionary<Direction, Wall> Walls { get; set; }
+        public Dictionary<Direction, Cell> Cells { get; set; }
+
+        public void BreakWall(Direction direction)
+        {
+            Walls[direction].IsBroken = true;
+        }
     }
 }

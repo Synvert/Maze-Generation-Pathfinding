@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MazeGenAndPathFinding.Model.PathFinding
+namespace MazeGenAndPathFinding.Model
 {
-    public interface IPathFindingAlgorithm
+    public enum WallType
     {
+        InnerWall,
+        OuterWall
     }
 }

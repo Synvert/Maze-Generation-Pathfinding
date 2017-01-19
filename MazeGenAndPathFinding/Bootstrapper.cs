@@ -1,11 +1,8 @@
-﻿using MazeGenAndPathFinding.Views;
-using Microsoft.Practices.Prism.UnityExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MazeGenAndPathFinding.Model;
+using MazeGenAndPathFinding.Views;
+using Microsoft.Practices.Unity;
 using System.Windows;
+using Prism.Unity;
 
 namespace MazeGenAndPathFinding
 {
@@ -19,11 +16,14 @@ namespace MazeGenAndPathFinding
         protected override void InitializeShell()
         {
             base.InitializeShell();
+            Application.Current.MainWindow.Show();
         }
 
         protected override void ConfigureContainer()
         {
             base.ConfigureContainer();
+            
+            Container.RegisterInstance<IAlgorithmManager>(new AlgorithmManager());
         }
     }
 }

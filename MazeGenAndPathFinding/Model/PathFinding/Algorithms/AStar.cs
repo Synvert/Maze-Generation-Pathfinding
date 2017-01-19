@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MazeGenAndPathFinding.Model.PathFinding
+namespace MazeGenAndPathFinding.Model.PathFinding.Algorithms
 {
-    public interface IPathFindingAlgorithm
+    public class AStar : IPathFindingAlgorithm
     {
     }
 }
