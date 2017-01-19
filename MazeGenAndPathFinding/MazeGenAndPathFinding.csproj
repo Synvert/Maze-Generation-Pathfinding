@@ -95,13 +95,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Model\DataModels\Cell.cs" />
-    <Compile Include="Model\AlgorithmManager.cs" />
     <Compile Include="Model\DataModels\Direction.cs" />
     <Compile Include="Model\DataModels\Wall.cs" />
-    <Compile Include="Model\Enums.cs" />
-    <Compile Include="Model\IAlgorithmManager.cs" />
+    <Compile Include="Model\DataModels\WallType.cs" />
     <Compile Include="Model\MazeGeneration\Algorithms\ReverseBacktracking.cs" />
     <Compile Include="Model\MazeGeneration\IMazeGenerationAlgorithm.cs" />
     <Compile Include="Model\PathFinding\Algorithms\AStar.cs" />
