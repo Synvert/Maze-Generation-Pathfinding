@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:MazeGenAndPathFinding.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
         WindowStartupLocation="CenterScreen"
         Title="Maze Generation and Path Finding"
         Height="600"
@@ -17,9 +19,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!-- Main Content Area -->
         
-        <!-- Right Control Section -->
+        <!-- Side Bar -->
         <TabControl Grid.Row="0"
                     Margin="1">
             <TabItem Header="Maze Generation">
@@ -31,13 +32,20 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Algorithm:" Margin="1"/>
-                    <ComboBox Grid.Column="1" Margin="1"></ComboBox>
+                    
+                    <TextBlock Text="Algorithm:"
+                               Margin="1"/>
+                    <ComboBox ItemsSource="{Binding MazeGenerationAlgorithms}"
+                              SelectedItem="{Binding SelectedMazeGenerationAlgorithm}"
+                              DisplayMemberPath="Name"
+                              Grid.Column="1"
+                              Margin="1"/>
                 </Grid>
-
             </TabItem>
         </TabControl>
-        <TabControl Grid.Row="1"
+        
+        <TabControl Grid.Column="0"
+                    Grid.Row="1"
                     Margin="1">
             <TabItem Header="Path Finding">
                 <Grid>
@@ -48,17 +56,17 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Algorithm:" Margin="1"/>
-                    <ComboBox Grid.Column="1" Margin="1"></ComboBox>
+                    
+                    <TextBlock Text="Algorithm:"
+                               Margin="1"/>
+                    <ComboBox ItemsSource="{Binding PathFindingAlgorithms}"
+                              SelectedItem="{Binding SelectedPathFindingAlgorithm}"
+                              DisplayMemberPath="Name"
+                              Grid.Column="1"
+                              Margin="1"/>
                 </Grid>
-
             </TabItem>
         </TabControl>
-
-
-        <!-- Key/Legend -->
-        <StackPanel>
-            
-        </StackPanel>
+        
     </Grid>
 </Window>

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MazeGenAndPathFinding.Model.PathFinding
+﻿namespace MazeGenAndPathFinding.Model.PathFinding
 {
     public interface IPathFindingAlgorithm
     {
+        string Name { get; }
     }
 }

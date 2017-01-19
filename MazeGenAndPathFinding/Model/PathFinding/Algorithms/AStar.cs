@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MazeGenAndPathFinding.Model.PathFinding.Algorithms
+﻿namespace MazeGenAndPathFinding.Model.PathFinding.Algorithms
 {
     public class AStar : IPathFindingAlgorithm
     {
+        public string Name { get; }
+
+        public AStar()
+        {
+            Name = "A*";
+        }
     }
 }
