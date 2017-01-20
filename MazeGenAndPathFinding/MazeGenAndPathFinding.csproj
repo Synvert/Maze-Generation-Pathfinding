@@ -87,10 +87,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Resources\Resources.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,7 +99,6 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Model\DataModels\Cell.cs" />
     <Compile Include="Model\DataModels\Direction.cs" />
-    <Compile Include="Model\DataModels\Events\CellsChangedEventArgs.cs" />
     <Compile Include="Model\DataModels\Wall.cs" />
     <Compile Include="Model\DataModels\WallType.cs" />
     <Compile Include="Model\MazeGeneration\Algorithms\ReverseBacktracking.cs" />

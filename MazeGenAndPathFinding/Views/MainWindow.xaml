@@ -10,7 +10,8 @@
         WindowStartupLocation="CenterScreen"
         Title="Maze Generation and Path Finding"
         Height="600"
-        Width="800">
+        Width="800"
+        SnapsToDevicePixels="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -105,7 +106,7 @@
         <!-- Maze Area -->
 
         <controls:MazeViewer Maze="{Binding SelectedMazeGenerationAlgorithm.Maze}" 
-                             SnapsToDevicePixels="True"
+                             RenderOptions.EdgeMode="Aliased"
                              Grid.Column="1"
                              Grid.Row="0"
                              Grid.RowSpan="2"
