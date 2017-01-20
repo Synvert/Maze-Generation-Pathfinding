@@ -47,7 +47,18 @@ namespace MazeGenAndPathFinding.ViewModels
 
         private void OnResetMazeCommandExecuted()
         {
-            SelectedMazeGenerationAlgorithm.ResetMaze();
+            SelectedMazeGenerationAlgorithm.Reset();
+        }
+
+        #endregion
+
+        #region	StepMazeCommand
+
+        public DelegateCommand StepMazeCommand { get; }
+
+        private void OnStepMazeCommandExecuted()
+        {
+            _selectedMazeGenerationAlgorithm.Step();
         }
 
         #endregion
@@ -77,6 +88,7 @@ namespace MazeGenAndPathFinding.ViewModels
         public MainViewModel()
         {
             ResetMazeCommand = new DelegateCommand(OnResetMazeCommandExecuted);
+            StepMazeCommand = new DelegateCommand(OnStepMazeCommandExecuted);
             GenerateMazeCommand = new DelegateCommand(OnGenerateMazeCommandExecuted);
 
             MazeGenerationAlgorithms = new List<MazeGenerationAlgoithmBase>

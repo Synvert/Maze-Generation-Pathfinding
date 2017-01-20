@@ -27,9 +27,11 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration
             Maze = new Maze(height, width);
         }
 
-        public abstract void ResetMaze();
+        public abstract void Reset();
 
         public abstract void GenerateMaze();
+
+        public abstract bool Step();
 
         protected Cell GetRandomCell()
         {

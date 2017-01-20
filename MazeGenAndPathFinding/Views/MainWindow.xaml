@@ -65,6 +65,10 @@
                                 Command="{Binding ResetMazeCommand}"
                                 HorizontalAlignment="Right"
                                 Margin="1"/>
+                        <Button Content="Step"
+                                Command="{Binding StepMazeCommand}"
+                                HorizontalAlignment="Right"
+                                Margin="1"/>
                         <Button Content="Generate"
                                 Command="{Binding GenerateMazeCommand}"
                                 HorizontalAlignment="Right"

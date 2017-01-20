@@ -6,6 +6,15 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
 {
     public class ReverseBacktracking : MazeGenerationAlgoithmBase
     {
+        #region Fields
+
+        private readonly Stack<Cell> _currentChain = new Stack<Cell>();
+        private readonly HashSet<Cell> _visitedCells = new HashSet<Cell>();
+        private Cell _currentCell;
+        private bool _isGenerated;
+
+        #endregion
+
         #region Constructor
 
         public ReverseBacktracking()
@@ -17,48 +26,67 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
 
         #region Methods
 
-        public override void ResetMaze()
+        public override void Initialize(int height, int width)
         {
+            base.Initialize(height, width);
+            _currentCell = GetRandomCell();
+        }
+
+        public override void Reset()
+        {
+            _currentChain.Clear();
+            _visitedCells.Clear();
+            _currentCell = GetRandomCell();
+
             Maze.ResetAllInteriorWalls(false);
             Maze.OnCellsChanged(null);
+
+            _isGenerated = false;
         }
 
         public override void GenerateMaze()
         {
-            Maze.ResetAllInteriorWalls(false);
-
-            var currentChain = new Stack<Cell>();
-            var visitedCells = new HashSet<Cell>();
-
-            var currentCell = GetRandomCell();
-
-            while(true)
+            if (_isGenerated)
             {
-                visitedCells.Add(currentCell);
-                var neighboringCells = Maze.GetNeighboringCells(currentCell)
-                    .Where(x => !visitedCells.Contains(x.Value))
-                    .ToList();
-                if (neighboringCells.Any())
-                {
-                    var randomNeighbor = neighboringCells.ElementAt(Random.Next(0, neighboringCells.Count));
-                    currentCell.BreakWall(randomNeighbor.Key);
-                    currentChain.Push(currentCell);
-                    currentCell = randomNeighbor.Value;
-                }
-                else
-                {
-                    if (currentChain.Any())
-                    {
-                        currentCell = currentChain.Pop();
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                Reset();
+            }
+
+            while (!Step())
+            {
             }
 
             Maze.OnCellsChanged(null);
+            _isGenerated = true;
+        }
+
+        public override bool Step()
+        {
+            _visitedCells.Add(_currentCell);
+            var neighboringCells = Maze.GetNeighboringCells(_currentCell)
+                .Where(x => !_visitedCells.Contains(x.Value))
+                .ToList();
+            if (neighboringCells.Any())
+            {
+                var randomNeighbor = neighboringCells.ElementAt(Random.Next(0, neighboringCells.Count));
+                _currentCell.BreakWall(randomNeighbor.Key);
+                _currentChain.Push(_currentCell);
+                _currentCell = randomNeighbor.Value;
+
+                Maze.OnCellsChanged(null);
+            }
+            else
+            {
+                if (_currentChain.Any())
+                {
+                    _currentCell = _currentChain.Pop();
+                }
+                else
+                {
+                    _isGenerated = true;
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion
