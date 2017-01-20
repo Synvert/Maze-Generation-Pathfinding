@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using MazeGenAndPathFinding.Extensions;
 using MazeGenAndPathFinding.Model.DataModels;
 using MazeGenAndPathFinding.Model.DataModels.Events;
 
@@ -37,7 +39,17 @@ namespace MazeGenAndPathFinding.Controls
 
         private void MazeOnCellsChanged(object sender, CellsChangedEventArgs cellsChangedEventArgs)
         {
-            InvalidateVisual();
+            if (cellsChangedEventArgs.CellsChanged == null)
+            {
+                InvalidateVisual();
+            }
+            else
+            {
+                foreach (var cell in cellsChangedEventArgs.CellsChanged)
+                {
+                    _cellBorderMap[cell].BorderThickness = GetCellWallThickness(cell);
+                }
+            }
         }
 
         public Maze Maze
@@ -56,6 +68,7 @@ namespace MazeGenAndPathFinding.Controls
 
         private const double CellWallThickness = 1;
         private readonly SolidColorBrush _cellWallColorBrush;
+        private readonly Dictionary<Cell, Border> _cellBorderMap = new Dictionary<Cell, Border>();
         private Canvas _canvas;
 
         #endregion
@@ -96,8 +109,9 @@ namespace MazeGenAndPathFinding.Controls
 
             var cellWidth = ActualWidth/Maze.Width;
             var cellHeight = ActualHeight/Maze.Height;
-
+            
             _canvas.Children.Clear();
+            _cellBorderMap.Clear();
 
             if (Maze == null)
             {
@@ -108,16 +122,17 @@ namespace MazeGenAndPathFinding.Controls
             {
                 for (var y = 0; y < Maze.Height; y++)
                 {
-                    var cell = new Border
+                    var border = new Border
                     {
                         BorderBrush = _cellWallColorBrush,
                         BorderThickness = GetCellWallThickness(Maze.Cells[x, y]),
                         Width = cellWidth,
                         Height = cellHeight
                     };
-                    Canvas.SetLeft(cell, cellWidth * x);
-                    Canvas.SetTop(cell, cellHeight* y);
-                    _canvas.Children.Add(cell);
+                    Canvas.SetLeft(border, cellWidth * x);
+                    Canvas.SetTop(border, cellHeight* y);
+                    _canvas.Children.Add(border);
+                    _cellBorderMap.Add(Maze.Cells[x, y], border);
                 }
             }
         }

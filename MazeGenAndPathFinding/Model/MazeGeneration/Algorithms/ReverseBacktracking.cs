@@ -70,9 +70,10 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
                 var randomNeighbor = neighboringCells.ElementAt(Random.Next(0, neighboringCells.Count));
                 _currentCell.BreakWall(randomNeighbor.Key);
                 _currentChain.Push(_currentCell);
-                _currentCell = randomNeighbor.Value;
 
-                Maze.OnCellsChanged(null);
+                Maze.OnCellsChanged(_currentCell, randomNeighbor.Value);
+
+                _currentCell = randomNeighbor.Value;
             }
             else
             {

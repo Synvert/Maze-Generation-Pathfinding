@@ -136,7 +136,7 @@ namespace MazeGenAndPathFinding.Model.DataModels
             return TryGetCell(x, y);
         }
 
-        public void OnCellsChanged(IReadOnlyList<Cell> cells)
+        public void OnCellsChanged(params Cell[] cells)
         {
             CellsChanged?.Invoke(this, new CellsChangedEventArgs(cells));
         }
