@@ -19,7 +19,13 @@ namespace MazeGenAndPathFinding.ViewModels
         public IMazeGenerationAlgorithm SelectedMazeGenerationAlgorithm
         {
             get { return _selectedMazeGenerationAlgorithm; }
-            set { SetProperty(ref _selectedMazeGenerationAlgorithm, value); }
+            set
+            {
+                if (SetProperty(ref _selectedMazeGenerationAlgorithm, value))
+                {
+                    value.Initialize(DefaultWidth, DefaultHeight);
+                }
+            }
         }
         private IMazeGenerationAlgorithm _selectedMazeGenerationAlgorithm;
 
@@ -29,6 +35,13 @@ namespace MazeGenAndPathFinding.ViewModels
             set { SetProperty(ref _selectedPathFindingAlgorithm, value); }
         }
         private IPathFindingAlgorithm _selectedPathFindingAlgorithm;
+
+        #endregion
+
+        #region Fields
+
+        private const int DefaultWidth = 10;
+        private const int DefaultHeight = 10;
 
         #endregion
 
@@ -45,8 +58,8 @@ namespace MazeGenAndPathFinding.ViewModels
                 new AStar()
             };
 
-            _selectedMazeGenerationAlgorithm = MazeGenerationAlgorithms.First();
-            _selectedPathFindingAlgorithm = PathFindingAlgorithms.First();
+            SelectedMazeGenerationAlgorithm = MazeGenerationAlgorithms.First();
+            SelectedPathFindingAlgorithm = PathFindingAlgorithms.First();
         }
 
         #endregion
