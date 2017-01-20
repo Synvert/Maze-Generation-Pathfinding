@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -70,6 +71,8 @@ namespace MazeGenAndPathFinding.Controls
         private readonly SolidColorBrush _cellWallColorBrush;
         private readonly Dictionary<Cell, Border> _cellBorderMap = new Dictionary<Cell, Border>();
         private Canvas _canvas;
+        private int _lastMazeWidth;
+        private int _lastMazeHeight;
 
         #endregion
 
@@ -109,32 +112,57 @@ namespace MazeGenAndPathFinding.Controls
 
             var cellWidth = ActualWidth/Maze.Width;
             var cellHeight = ActualHeight/Maze.Height;
-            
-            _canvas.Children.Clear();
-            _cellBorderMap.Clear();
+
+            var recreateBorders = !(Maze.Width == _lastMazeWidth && Maze.Height == _lastMazeHeight);
+
+            if (recreateBorders)
+            {
+                _canvas.Children.Clear();
+                _cellBorderMap.Clear();
+            }
 
             if (Maze == null)
             {
                 return;
             }
-
+            
             for (var x = 0; x < Maze.Width; x++)
             {
                 for (var y = 0; y < Maze.Height; y++)
                 {
-                    var border = new Border
+                    Border border;
+                    if (recreateBorders)
                     {
-                        BorderBrush = _cellWallColorBrush,
-                        BorderThickness = GetCellWallThickness(Maze.Cells[x, y]),
-                        Width = cellWidth,
-                        Height = cellHeight
-                    };
+                        border = new Border
+                        {
+                            BorderBrush = _cellWallColorBrush,
+                            BorderThickness = GetCellWallThickness(Maze.Cells[x, y]),
+                            Width = cellWidth,
+                            Height = cellHeight
+                        };
+                    }
+                    else
+                    {
+                        border = _cellBorderMap[Maze.Cells[x, y]];
+                        border.BorderBrush = _cellWallColorBrush;
+                        border.BorderThickness = GetCellWallThickness(Maze.Cells[x, y]);
+                        border.Width = cellWidth;
+                        border.Height = cellHeight;
+                    }
+
                     Canvas.SetLeft(border, cellWidth * x);
                     Canvas.SetTop(border, cellHeight* y);
-                    _canvas.Children.Add(border);
-                    _cellBorderMap.Add(Maze.Cells[x, y], border);
+                    
+                    if (recreateBorders)
+                    {
+                        _canvas.Children.Add(border);
+                        _cellBorderMap.Add(Maze.Cells[x, y], border);
+                    }
                 }
             }
+
+            _lastMazeWidth = Maze.Width;
+            _lastMazeHeight = Maze.Height;
         }
         
         private static Thickness GetCellWallThickness(Cell cell)

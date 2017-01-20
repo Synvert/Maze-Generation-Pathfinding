@@ -71,7 +71,7 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
                 _currentCell.BreakWall(randomNeighbor.Key);
                 _currentChain.Push(_currentCell);
 
-                Maze.OnCellsChanged(_currentCell, randomNeighbor.Value);
+                //Maze.OnCellsChanged(_currentCell, randomNeighbor.Value);
 
                 _currentCell = randomNeighbor.Value;
             }
