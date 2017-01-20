@@ -100,12 +100,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\MazeViewer.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Model\DataModels\Cell.cs" />
     <Compile Include="Model\DataModels\Direction.cs" />
+    <Compile Include="Model\DataModels\Events\CellsChangedEventArgs.cs" />
     <Compile Include="Model\DataModels\Wall.cs" />
     <Compile Include="Model\DataModels\WallType.cs" />
     <Compile Include="Model\MazeGeneration\Algorithms\ReverseBacktracking.cs" />
-    <Compile Include="Model\MazeGeneration\IMazeGenerationAlgorithm.cs" />
+    <Compile Include="Model\MazeGeneration\MazeGenerationAlgoithmBase.cs" />
     <Compile Include="Model\PathFinding\Algorithms\AStar.cs" />
     <Compile Include="Model\PathFinding\IPathFindingAlgorithm.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

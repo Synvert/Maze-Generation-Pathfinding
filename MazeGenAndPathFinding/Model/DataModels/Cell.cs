@@ -11,6 +11,16 @@ namespace MazeGenAndPathFinding.Model.DataModels
         /// </summary>
         public Dictionary<Direction, Wall> Walls { get; }
 
+        /// <summary>
+        /// Gets the X coordinate of this <see cref="Cell"/>.
+        /// </summary>
+        public int X { get; }
+
+        /// <summary>
+        /// Gets the Y coordinate of this <see cref="Cell"/>.
+        /// </summary>
+        public int Y { get; }
+
         #endregion
 
         #region Constructor
@@ -18,7 +28,9 @@ namespace MazeGenAndPathFinding.Model.DataModels
         /// <summary>
         /// Constructs a new instance of <see cref="Cell"/>.
         /// </summary>
-        public Cell()
+        /// <param name="x">The X coordinate of this <see cref="Cell"/>.</param>
+        /// <param name="y">the Y coordinate of this <see cref="Cell"/>.</param>
+        public Cell(int x, int y)
         {
             Walls = new Dictionary<Direction, Wall>
             {
@@ -27,6 +39,8 @@ namespace MazeGenAndPathFinding.Model.DataModels
                 { Direction.South, new Wall() },
                 { Direction.West, new Wall() },
             };
+            X = x;
+            Y = y;
         }
 
         #endregion

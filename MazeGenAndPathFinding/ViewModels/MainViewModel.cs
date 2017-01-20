@@ -4,6 +4,7 @@ using MazeGenAndPathFinding.Model.MazeGeneration;
 using MazeGenAndPathFinding.Model.MazeGeneration.Algorithms;
 using MazeGenAndPathFinding.Model.PathFinding;
 using MazeGenAndPathFinding.Model.PathFinding.Algorithms;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace MazeGenAndPathFinding.ViewModels
@@ -12,11 +13,11 @@ namespace MazeGenAndPathFinding.ViewModels
     {
         #region Properties
 
-        public IList<IMazeGenerationAlgorithm> MazeGenerationAlgorithms { get; }
+        public IList<MazeGenerationAlgoithmBase> MazeGenerationAlgorithms { get; }
 
         public IList<IPathFindingAlgorithm> PathFindingAlgorithms { get; }
 
-        public IMazeGenerationAlgorithm SelectedMazeGenerationAlgorithm
+        public MazeGenerationAlgoithmBase SelectedMazeGenerationAlgorithm
         {
             get { return _selectedMazeGenerationAlgorithm; }
             set
@@ -27,7 +28,7 @@ namespace MazeGenAndPathFinding.ViewModels
                 }
             }
         }
-        private IMazeGenerationAlgorithm _selectedMazeGenerationAlgorithm;
+        private MazeGenerationAlgoithmBase _selectedMazeGenerationAlgorithm;
 
         public IPathFindingAlgorithm SelectedPathFindingAlgorithm
         {
@@ -35,6 +36,32 @@ namespace MazeGenAndPathFinding.ViewModels
             set { SetProperty(ref _selectedPathFindingAlgorithm, value); }
         }
         private IPathFindingAlgorithm _selectedPathFindingAlgorithm;
+
+        #endregion
+
+        #region Commands
+
+        #region	ResetMazeCommand
+
+        public DelegateCommand ResetMazeCommand { get; }
+
+        private void OnResetMazeCommandExecuted()
+        {
+            SelectedMazeGenerationAlgorithm.ResetMaze();
+        }
+
+        #endregion
+
+        #region	GenerateMazeCommand
+
+        public DelegateCommand GenerateMazeCommand { get; }
+
+        private void OnGenerateMazeCommandExecuted()
+        {
+            SelectedMazeGenerationAlgorithm.GenerateMaze();
+        }
+
+        #endregion
 
         #endregion
 
@@ -49,7 +76,10 @@ namespace MazeGenAndPathFinding.ViewModels
 
         public MainViewModel()
         {
-            MazeGenerationAlgorithms = new List<IMazeGenerationAlgorithm>
+            ResetMazeCommand = new DelegateCommand(OnResetMazeCommandExecuted);
+            GenerateMazeCommand = new DelegateCommand(OnGenerateMazeCommandExecuted);
+
+            MazeGenerationAlgorithms = new List<MazeGenerationAlgoithmBase>
             {
                 new ReverseBacktracking()
             };

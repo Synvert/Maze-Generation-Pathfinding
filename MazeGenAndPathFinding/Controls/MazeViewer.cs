@@ -2,8 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using MazeGenAndPathFinding.Model.DataModels;
+using MazeGenAndPathFinding.Model.DataModels.Events;
 
 namespace MazeGenAndPathFinding.Controls
 {
@@ -12,14 +12,41 @@ namespace MazeGenAndPathFinding.Controls
     {
         #region Dependency Properties
 
+        #region MazeProperty
+
         public static readonly DependencyProperty MazeProperty = DependencyProperty.Register(
-            "Maze", typeof(Maze), typeof(MazeViewer), new PropertyMetadata(default(Maze)));
+            "Maze", typeof(Maze), typeof(MazeViewer), new PropertyMetadata(default(Maze), MazePropertyChangedCallback));
+
+        private static void MazePropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
+        {
+            ((MazeViewer)dependencyObject).OnMazeChanged((Maze)args.OldValue, (Maze)args.NewValue);
+        }
+
+        private void OnMazeChanged(Maze oldValue, Maze newValue)
+        {
+            if (oldValue != null)
+            {
+                oldValue.CellsChanged -= MazeOnCellsChanged;
+            }
+            if (newValue != null)
+            {
+                newValue.CellsChanged += MazeOnCellsChanged;
+            }
+            InvalidateVisual();
+        }
+
+        private void MazeOnCellsChanged(object sender, CellsChangedEventArgs cellsChangedEventArgs)
+        {
+            InvalidateVisual();
+        }
 
         public Maze Maze
         {
-            get { return (Maze) GetValue(MazeProperty); }
+            get { return (Maze)GetValue(MazeProperty); }
             set { SetValue(MazeProperty, value); }
         }
+
+        #endregion
 
         #endregion
 
@@ -27,9 +54,9 @@ namespace MazeGenAndPathFinding.Controls
 
         public const string PartCanvasName = "PART_Canvas";
 
-        private const double _cellWallThickness = 1;
+        private const double CellWallThickness = 1;
+        private readonly SolidColorBrush _cellWallColorBrush;
         private Canvas _canvas;
-        private SolidColorBrush _cellWallColorBrush;
 
         #endregion
 
@@ -71,6 +98,12 @@ namespace MazeGenAndPathFinding.Controls
             var cellHeight = ActualHeight/Maze.Height;
 
             _canvas.Children.Clear();
+
+            if (Maze == null)
+            {
+                return;
+            }
+
             for (var x = 0; x < Maze.Width; x++)
             {
                 for (var y = 0; y < Maze.Height; y++)
@@ -88,15 +121,15 @@ namespace MazeGenAndPathFinding.Controls
                 }
             }
         }
-
-        private Thickness GetCellWallThickness(Cell cell)
+        
+        private static Thickness GetCellWallThickness(Cell cell)
         {
             return new Thickness
             {
-                Top = cell.Walls[Direction.North].IsBroken ? 0.0 : _cellWallThickness,
-                Right = cell.Walls[Direction.East].IsBroken ? 0.0 : _cellWallThickness,
-                Bottom = cell.Walls[Direction.South].IsBroken ? 0.0 : _cellWallThickness,
-                Left = cell.Walls[Direction.West].IsBroken ? 0.0 : _cellWallThickness
+                Top = cell.Walls[Direction.North].IsBroken ? 0.0 : CellWallThickness,
+                Right = cell.Walls[Direction.East].IsBroken ? 0.0 : CellWallThickness,
+                Bottom = cell.Walls[Direction.South].IsBroken ? 0.0 : CellWallThickness,
+                Left = cell.Walls[Direction.West].IsBroken ? 0.0 : CellWallThickness
             };
         }
 

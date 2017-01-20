@@ -29,18 +29,47 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
-                    <TextBlock Text="Algorithm:"
+
+                    <Grid Grid.ColumnSpan="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Algorithm:"
+                               Grid.Column="0"
+                               Grid.Row="0"
                                Margin="1"/>
-                    <ComboBox ItemsSource="{Binding MazeGenerationAlgorithms}"
+                        <ComboBox ItemsSource="{Binding MazeGenerationAlgorithms}"
                               SelectedItem="{Binding SelectedMazeGenerationAlgorithm}"
                               DisplayMemberPath="Name"
                               Grid.Column="1"
+                              Grid.Row="0"
                               Margin="1"/>
+                    </Grid>
+                    
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Grid.Column="0"
+                                Grid.Row="2"
+                                Grid.ColumnSpan="4">
+                        <Button Content="Reset"
+                                Command="{Binding ResetMazeCommand}"
+                                HorizontalAlignment="Right"
+                                Margin="1"/>
+                        <Button Content="Generate"
+                                Command="{Binding GenerateMazeCommand}"
+                                HorizontalAlignment="Right"
+                                Margin="1"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>
