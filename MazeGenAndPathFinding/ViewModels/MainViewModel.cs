@@ -13,11 +13,11 @@ namespace MazeGenAndPathFinding.ViewModels
     {
         #region Properties
 
-        public IList<MazeGenerationAlgoithmBase> MazeGenerationAlgorithms { get; }
+        public IList<MazeGenerationAlgorithmBase> MazeGenerationAlgorithms { get; }
 
         public IList<IPathFindingAlgorithm> PathFindingAlgorithms { get; }
 
-        public MazeGenerationAlgoithmBase SelectedMazeGenerationAlgorithm
+        public MazeGenerationAlgorithmBase SelectedMazeGenerationAlgorithm
         {
             get { return _selectedMazeGenerationAlgorithm; }
             set
@@ -28,7 +28,7 @@ namespace MazeGenAndPathFinding.ViewModels
                 }
             }
         }
-        private MazeGenerationAlgoithmBase _selectedMazeGenerationAlgorithm;
+        private MazeGenerationAlgorithmBase _selectedMazeGenerationAlgorithm;
 
         public IPathFindingAlgorithm SelectedPathFindingAlgorithm
         {
@@ -91,7 +91,7 @@ namespace MazeGenAndPathFinding.ViewModels
             StepMazeCommand = new DelegateCommand(OnStepMazeCommandExecuted);
             GenerateMazeCommand = new DelegateCommand(OnGenerateMazeCommandExecuted);
 
-            MazeGenerationAlgorithms = new List<MazeGenerationAlgoithmBase>
+            MazeGenerationAlgorithms = new List<MazeGenerationAlgorithmBase>
             {
                 new ReverseBacktracking()
             };

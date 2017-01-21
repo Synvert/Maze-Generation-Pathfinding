@@ -4,7 +4,7 @@ using MazeGenAndPathFinding.Model.DataModels;
 
 namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
 {
-    public class ReverseBacktracking : MazeGenerationAlgoithmBase
+    public class ReverseBacktracking : MazeGenerationAlgorithmBase
     {
         #region Fields
 

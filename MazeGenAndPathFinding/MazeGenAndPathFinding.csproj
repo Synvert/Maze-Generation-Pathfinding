@@ -102,7 +102,7 @@
     <Compile Include="Model\DataModels\Wall.cs" />
     <Compile Include="Model\DataModels\WallType.cs" />
     <Compile Include="Model\MazeGeneration\Algorithms\ReverseBacktracking.cs" />
-    <Compile Include="Model\MazeGeneration\MazeGenerationAlgoithmBase.cs" />
+    <Compile Include="Model\MazeGeneration\MazeGenerationAlgorithmBase.cs" />
     <Compile Include="Model\PathFinding\Algorithms\AStar.cs" />
     <Compile Include="Model\PathFinding\IPathFindingAlgorithm.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

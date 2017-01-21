@@ -1,10 +1,9 @@
 ﻿using System;
 using MazeGenAndPathFinding.Model.DataModels;
-using Prism.Mvvm;
 
 namespace MazeGenAndPathFinding.Model.MazeGeneration
 {
-    public abstract class MazeGenerationAlgoithmBase
+    public abstract class MazeGenerationAlgorithmBase
     {
         #region Properties
 
