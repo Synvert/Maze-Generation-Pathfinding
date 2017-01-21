@@ -24,7 +24,7 @@ namespace MazeGenAndPathFinding.ViewModels
             {
                 if (SetProperty(ref _selectedMazeGenerationAlgorithm, value))
                 {
-                    value.Initialize(DefaultWidth, DefaultHeight);
+                    value.Initialize(Width, Height);
                 }
             }
         }
@@ -37,6 +37,20 @@ namespace MazeGenAndPathFinding.ViewModels
         }
         private IPathFindingAlgorithm _selectedPathFindingAlgorithm;
 
+        public int Width
+        {
+            get { return _width; }
+            set { SetProperty(ref _width, value); }
+        }
+        private int _width = 25;
+
+        public int Height
+        {
+            get { return _height; }
+            set { SetProperty(ref _height, value); }
+        }
+        private int _height = 25;
+
         #endregion
 
         #region Commands
@@ -47,6 +61,7 @@ namespace MazeGenAndPathFinding.ViewModels
 
         private void OnResetMazeCommandExecuted()
         {
+            SelectedMazeGenerationAlgorithm.Initialize(Width, Height);
             SelectedMazeGenerationAlgorithm.Reset();
         }
 
@@ -69,17 +84,11 @@ namespace MazeGenAndPathFinding.ViewModels
 
         private void OnGenerateMazeCommandExecuted()
         {
+            SelectedMazeGenerationAlgorithm.Initialize(Width, Height);
             SelectedMazeGenerationAlgorithm.GenerateMaze();
         }
 
         #endregion
-
-        #endregion
-
-        #region Fields
-
-        private const int DefaultWidth = 100;
-        private const int DefaultHeight = 100;
 
         #endregion
 

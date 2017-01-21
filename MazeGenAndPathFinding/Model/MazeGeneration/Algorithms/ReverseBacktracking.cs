@@ -39,23 +39,26 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
             _currentCell = GetRandomCell();
 
             Maze.ResetAllInteriorWalls(false);
-            Maze.OnCellsChanged();
+            RaiseCellsChangedEvent();
 
             _isGenerated = false;
         }
 
         public override void GenerateMaze()
         {
+            SuppressCellsChangedEvent = true;
+
             if (_isGenerated)
             {
                 Reset();
             }
-
             while (!Step())
             {
             }
 
-            Maze.OnCellsChanged();
+            SuppressCellsChangedEvent = false;
+
+            RaiseCellsChangedEvent();
             _isGenerated = true;
         }
 
@@ -70,10 +73,9 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
                 var randomNeighbor = neighboringCells.ElementAt(Random.Next(0, neighboringCells.Count));
                 _currentCell.BreakWall(randomNeighbor.Key);
                 _currentChain.Push(_currentCell);
-
-                Maze.OnCellsChanged();
-
                 _currentCell = randomNeighbor.Value;
+                
+                RaiseCellsChangedEvent();
             }
             else
             {

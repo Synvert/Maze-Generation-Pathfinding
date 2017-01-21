@@ -1,21 +1,29 @@
 ﻿using System;
 using MazeGenAndPathFinding.Model.DataModels;
+using Prism.Mvvm;
 
 namespace MazeGenAndPathFinding.Model.MazeGeneration
 {
-    public abstract class MazeGenerationAlgorithmBase
+    public abstract class MazeGenerationAlgorithmBase : BindableBase
     {
         #region Properties
 
         public string Name { get; protected set; }
 
-        public Maze Maze { get; protected set; }
+        public Maze Maze
+        {
+            get { return _maze; }
+            protected set { SetProperty(ref _maze, value); }
+        }
+        private Maze _maze;
 
         #endregion
 
         #region Fields
 
         protected readonly Random Random = new Random();
+
+        protected bool SuppressCellsChangedEvent;
 
         #endregion
 
@@ -37,6 +45,14 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration
             var x = Random.Next(0, Maze.Width);
             var y = Random.Next(0, Maze.Height);
             return Maze.Cells[x, y];
+        }
+
+        protected void RaiseCellsChangedEvent()
+        {
+            if (!SuppressCellsChangedEvent)
+            {
+                Maze.OnCellsChanged();
+            }
         }
 
         #endregion
