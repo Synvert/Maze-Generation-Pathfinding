@@ -78,8 +78,8 @@ namespace MazeGenAndPathFinding.ViewModels
 
         #region Fields
 
-        private const int DefaultWidth = 10;
-        private const int DefaultHeight = 10;
+        private const int DefaultWidth = 100;
+        private const int DefaultHeight = 100;
 
         #endregion
 

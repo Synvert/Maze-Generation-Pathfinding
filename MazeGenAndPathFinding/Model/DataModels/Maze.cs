@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MazeGenAndPathFinding.Extensions;
-using MazeGenAndPathFinding.Model.DataModels.Events;
 
 namespace MazeGenAndPathFinding.Model.DataModels
 {
@@ -30,7 +28,7 @@ namespace MazeGenAndPathFinding.Model.DataModels
 
         #endregion
 
-        public event EventHandler<CellsChangedEventArgs> CellsChanged;
+        public event EventHandler CellsChanged;
 
         #region Constructor
 
@@ -66,27 +64,48 @@ namespace MazeGenAndPathFinding.Model.DataModels
 
         #region Methods
 
-        public void ResetAllInteriorWalls(bool value)
+
+        /// <summary>
+        /// Enumerates the cells in the maze with unique walls.
+        /// </summary>
+        /// <returns>The cells in the maze with unique walls.</returns>
+        /// <remarks>
+        /// This method only returns a cell if both x and y are either both even or both odd.
+        /// This avoids returning cells that share walls with other cells.
+        /// 
+        /// In the below diagram, the empty boxes represent the ones returned by this method.
+        /// 
+        /// ☐■☐■☐■☐■☐
+        /// ■☐■☐■☐■☐■
+        /// ☐■☐■☐■☐■☐
+        /// ■☐■☐■☐■☐■
+        /// </remarks>
+        public IEnumerable<Cell> EnumerateCellsWithUniqueWalls()
         {
             for (var x = 0; x < Width; x++)
             {
                 for (var y = 0; y < Height; y++)
                 {
-                    // Both x and y must be either even or odd together.
-                    // This avoids unnecessary assignments.
-                    var xMod2 = x % 2;
-                    var yMod2 = y % 2;
+                    var xMod2 = x%2;
+                    var yMod2 = y%2;
                     if (!((xMod2 == 0 && yMod2 == 0)
                           || (xMod2 != 0 && yMod2 != 0)))
                     {
                         continue;
                     }
+                    yield return Cells[x, y];
+                }
+            }
+        }
 
-                    foreach (var neighboringCell in GetNeighboringCells(Cells[x, y]))
-                    {
-                        var direction = neighboringCell.Key;
-                        Cells[x, y].Walls[direction].IsBroken = value;
-                    }
+        public void ResetAllInteriorWalls(bool value)
+        {
+            foreach (var cell in EnumerateCellsWithUniqueWalls())
+            {
+                foreach (var neighboringCell in GetNeighboringCells(cell))
+                {
+                    var direction = neighboringCell.Key;
+                    cell.Walls[direction].IsBroken = value;
                 }
             }
         }
@@ -136,9 +155,9 @@ namespace MazeGenAndPathFinding.Model.DataModels
             return TryGetCell(x, y);
         }
 
-        public void OnCellsChanged(params Cell[] cells)
+        public void OnCellsChanged()
         {
-            CellsChanged?.Invoke(this, new CellsChangedEventArgs(cells));
+            CellsChanged?.Invoke(this, EventArgs.Empty);
         }
         
         /// <summary>
@@ -149,26 +168,13 @@ namespace MazeGenAndPathFinding.Model.DataModels
         /// </remarks>
         private void MergeCommonCellWalls()
         {
-            for (var x = 0; x < Width; x++)
+            foreach (var cell in EnumerateCellsWithUniqueWalls())
             {
-                for (var y = 0; y < Height; y++)
+                foreach (var neighboringCellKvp in GetNeighboringCells(cell))
                 {
-                    // Both x and y must be either even or odd together.
-                    // This avoids unnecessary assignments.
-                    var xMod2 = x % 2;
-                    var yMod2 = y % 2;
-                    if (!((xMod2 == 0 && yMod2 == 0)
-                          || (xMod2 != 0 && yMod2 != 0)))
-                    {
-                        continue;
-                    }
-
-                    foreach (var neighboringCell in GetNeighboringCells(Cells[x, y]))
-                    {
-                        var direction = neighboringCell.Key;
-                        var cell = neighboringCell.Value;
-                        cell.Walls[direction.GetOpposite()] = Cells[x, y].Walls[direction];
-                    }
+                    var direction = neighboringCellKvp.Key;
+                    var neighboringcell = neighboringCellKvp.Value;
+                    neighboringcell.Walls[direction.GetOpposite()] = cell.Walls[direction];
                 }
             }
         }

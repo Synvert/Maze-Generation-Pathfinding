@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MazeGenAndPathFinding.Extensions;
 using MazeGenAndPathFinding.Model.DataModels;
-using MazeGenAndPathFinding.Model.DataModels.Events;
 
 namespace MazeGenAndPathFinding.Controls
 {
-    [TemplatePart(Name = PartCanvasName, Type = typeof(Canvas))]
     public class MazeViewer : Control
     {
         #region Dependency Properties
@@ -37,19 +33,9 @@ namespace MazeGenAndPathFinding.Controls
             InvalidateVisual();
         }
 
-        private void MazeOnCellsChanged(object sender, CellsChangedEventArgs cellsChangedEventArgs)
+        private void MazeOnCellsChanged(object sender, EventArgs args)
         {
-            if (cellsChangedEventArgs.CellsChanged == null)
-            {
-                InvalidateVisual();
-            }
-            else
-            {
-                foreach (var cell in cellsChangedEventArgs.CellsChanged)
-                {
-                    _cellBorderMap[cell].BorderThickness = GetCellWallThickness(cell);
-                }
-            }
+            InvalidateVisual();
         }
 
         public Maze Maze
@@ -64,12 +50,7 @@ namespace MazeGenAndPathFinding.Controls
 
         #region Fields
 
-        public const string PartCanvasName = "PART_Canvas";
-
-        private const double CellWallThickness = 1;
-        private readonly SolidColorBrush _cellWallColorBrush;
-        private readonly Dictionary<Cell, Border> _cellBorderMap = new Dictionary<Cell, Border>();
-        private Canvas _canvas;
+        private readonly Pen _linePen;
 
         #endregion
 
@@ -77,27 +58,15 @@ namespace MazeGenAndPathFinding.Controls
 
         public MazeViewer()
         {
-            _cellWallColorBrush = new SolidColorBrush(Colors.Black);
+           _linePen = new Pen(new SolidColorBrush(Colors.Black), 1);
+           _linePen.Brush.Freeze();
+           _linePen.Freeze();
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
-        /// </summary>
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            _canvas = GetTemplateChild(PartCanvasName) as Canvas;
-            if (_canvas == null)
-            {
-                throw new Exception($"{nameof(MazeViewer)} template must include a canvas control with the name {PartCanvasName}");
-            }
-        }
-
+        
         /// <summary>
         /// When overridden in a derived class, participates in rendering operations that are directed by the layout system.
         /// The rendering instructions for this element are not used directly when this method is invoked, and are instead preserved for later asynchronous use by layout and drawing.
@@ -105,50 +74,46 @@ namespace MazeGenAndPathFinding.Controls
         /// <param name="drawingContext">The drawing instructions for a specific element. This context is provided to the layout system.</param>
         protected override void OnRender(DrawingContext drawingContext)
         {
-            base.OnRender(drawingContext);
-
             var cellWidth = ActualWidth/Maze.Width;
             var cellHeight = ActualHeight/Maze.Height;
             
-            _canvas.Children.Clear();
-            _cellBorderMap.Clear();
-
             if (Maze == null)
             {
                 return;
             }
 
-            for (var x = 0; x < Maze.Width; x++)
+            // Draw outer walls manually because the method used for drawing interior walls leaves gaps.
+            drawingContext.DrawLine(_linePen, new Point(0,0), new Point(ActualWidth, 0));
+            drawingContext.DrawLine(_linePen, new Point(ActualWidth, 0), new Point(ActualWidth, ActualHeight));
+            drawingContext.DrawLine(_linePen, new Point(ActualWidth, ActualHeight), new Point(0, ActualHeight));
+            drawingContext.DrawLine(_linePen, new Point(0, ActualHeight), new Point(0,0));
+            
+            foreach (var cell in Maze.EnumerateCellsWithUniqueWalls())
             {
-                for (var y = 0; y < Maze.Height; y++)
+                var topLeft = new Point(cellWidth * cell.X, cellHeight * cell.Y);
+                var topRight = new Point(cellWidth * cell.X + cellWidth, cellHeight * cell.Y);
+                var bottomLeft = new Point(cellWidth * cell.X, cellHeight * cell.Y + cellHeight);
+                var bottomRight = new Point(cellWidth * cell.X + cellWidth, cellHeight * cell.Y + cellHeight);
+
+                if (!cell.Walls[Direction.North].IsBroken)
                 {
-                    var border = new Border
-                    {
-                        BorderBrush = _cellWallColorBrush,
-                        BorderThickness = GetCellWallThickness(Maze.Cells[x, y]),
-                        Width = cellWidth,
-                        Height = cellHeight
-                    };
-                    Canvas.SetLeft(border, cellWidth * x);
-                    Canvas.SetTop(border, cellHeight* y);
-                    _canvas.Children.Add(border);
-                    _cellBorderMap.Add(Maze.Cells[x, y], border);
+                    drawingContext.DrawLine(_linePen, topLeft, topRight);
+                }
+                if (!cell.Walls[Direction.East].IsBroken)
+                {
+                    drawingContext.DrawLine(_linePen, topRight, bottomRight);
+                }
+                if (!cell.Walls[Direction.South].IsBroken)
+                {
+                    drawingContext.DrawLine(_linePen, bottomRight, bottomLeft);
+                }
+                if (!cell.Walls[Direction.West].IsBroken)
+                {
+                    drawingContext.DrawLine(_linePen, bottomLeft, topLeft);
                 }
             }
         }
-        
-        private static Thickness GetCellWallThickness(Cell cell)
-        {
-            return new Thickness
-            {
-                Top = cell.Walls[Direction.North].IsBroken ? 0.0 : CellWallThickness,
-                Right = cell.Walls[Direction.East].IsBroken ? 0.0 : CellWallThickness,
-                Bottom = cell.Walls[Direction.South].IsBroken ? 0.0 : CellWallThickness,
-                Left = cell.Walls[Direction.West].IsBroken ? 0.0 : CellWallThickness
-            };
-        }
 
         #endregion
-
     }
 }
