@@ -47,7 +47,7 @@ namespace MazeGenAndPathFinding.Model.DataModels
             Width = width;
             Height = height;
 
-            //Create Default Cells
+            // Create default cells
             Cells = new Cell[Width, Height];
             for (var x = 0; x < Width; x++)
             {
@@ -56,15 +56,20 @@ namespace MazeGenAndPathFinding.Model.DataModels
                     Cells[x, y] = new Cell(x, y);
                 }
             }
-
-            MergeCommonCellWalls();
+            // Set neighboring cells for each cell
+            for (var x = 0; x < Width; x++)
+            {
+                for (var y = 0; y < Height; y++)
+                {
+                    Cells[x, y].NeighboringCells = GetNeighboringCells(Cells[x, y]);
+                }
+            }
         }
 
         #endregion
 
         #region Methods
-
-
+        
         /// <summary>
         /// Enumerates the cells in the maze with unique walls.
         /// </summary>
@@ -105,24 +110,9 @@ namespace MazeGenAndPathFinding.Model.DataModels
                 foreach (var neighboringCell in GetNeighboringCells(cell))
                 {
                     var direction = neighboringCell.Key;
-                    cell.Walls[direction].IsBroken = value;
+                    cell.Walls[direction] = value;
                 }
             }
-        }
-
-        public Dictionary<Direction, Cell> GetNeighboringCells(Cell cell)
-        {
-            var neighboringCells = new Dictionary<Direction, Cell>();
-            for (Direction direction = 0; (int)direction < 4; direction++)
-            {
-                var cellInDirection = TryGetCellInDirection(cell, direction);
-                if (cellInDirection == null)
-                {
-                    continue;
-                }
-                neighboringCells.Add(direction, cellInDirection);
-            }
-            return neighboringCells;
         }
 
         /// <summary>
@@ -159,24 +149,20 @@ namespace MazeGenAndPathFinding.Model.DataModels
         {
             CellsChanged?.Invoke(this, EventArgs.Empty);
         }
-        
-        /// <summary>
-        /// Iterates over <see cref="Cells"/>, merging walls shared between cells so they share the same reference.
-        /// </summary>
-        /// <remarks>
-        /// This is useful for when <see cref="Cell.BreakWall"/> is called, the change is reflected in the neighboring cell.
-        /// </remarks>
-        private void MergeCommonCellWalls()
+
+        private Dictionary<Direction, Cell> GetNeighboringCells(Cell cell)
         {
-            foreach (var cell in EnumerateCellsWithUniqueWalls())
+            var neighboringCells = new Dictionary<Direction, Cell>();
+            for (Direction direction = 0; (int)direction < 4; direction++)
             {
-                foreach (var neighboringCellKvp in GetNeighboringCells(cell))
+                var cellInDirection = TryGetCellInDirection(cell, direction);
+                if (cellInDirection == null)
                 {
-                    var direction = neighboringCellKvp.Key;
-                    var neighboringcell = neighboringCellKvp.Value;
-                    neighboringcell.Walls[direction.GetOpposite()] = cell.Walls[direction];
+                    continue;
                 }
+                neighboringCells.Add(direction, cellInDirection);
             }
+            return neighboringCells;
         }
 
         /// <summary>

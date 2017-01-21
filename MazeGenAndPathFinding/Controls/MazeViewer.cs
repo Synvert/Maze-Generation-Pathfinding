@@ -95,19 +95,19 @@ namespace MazeGenAndPathFinding.Controls
                 var bottomLeft = new Point(cellWidth * cell.X, cellHeight * cell.Y + cellHeight);
                 var bottomRight = new Point(cellWidth * cell.X + cellWidth, cellHeight * cell.Y + cellHeight);
 
-                if (!cell.Walls[Direction.North].IsBroken)
+                if (cell.Walls[Direction.North])
                 {
                     drawingContext.DrawLine(_linePen, topLeft, topRight);
                 }
-                if (!cell.Walls[Direction.East].IsBroken)
+                if (cell.Walls[Direction.East])
                 {
                     drawingContext.DrawLine(_linePen, topRight, bottomRight);
                 }
-                if (!cell.Walls[Direction.South].IsBroken)
+                if (cell.Walls[Direction.South])
                 {
                     drawingContext.DrawLine(_linePen, bottomRight, bottomLeft);
                 }
-                if (!cell.Walls[Direction.West].IsBroken)
+                if (cell.Walls[Direction.West])
                 {
                     drawingContext.DrawLine(_linePen, bottomLeft, topLeft);
                 }

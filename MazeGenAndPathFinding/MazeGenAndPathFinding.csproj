@@ -123,8 +123,6 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Model\DataModels\Cell.cs" />
     <Compile Include="Model\DataModels\Direction.cs" />
-    <Compile Include="Model\DataModels\Wall.cs" />
-    <Compile Include="Model\DataModels\WallType.cs" />
     <Compile Include="Model\MazeGeneration\Algorithms\ReverseBacktracking.cs" />
     <Compile Include="Model\MazeGeneration\MazeGenerationAlgorithmBase.cs" />
     <Compile Include="Model\PathFinding\Algorithms\AStar.cs" />

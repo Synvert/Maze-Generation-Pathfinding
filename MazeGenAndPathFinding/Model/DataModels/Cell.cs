@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MazeGenAndPathFinding.Extensions;
 
 namespace MazeGenAndPathFinding.Model.DataModels
 {
@@ -7,9 +8,14 @@ namespace MazeGenAndPathFinding.Model.DataModels
         #region Properties
 
         /// <summary>
-        /// Gets the <see cref="Wall"/>s of the <see cref="Cell"/> for each <see cref="Direction"/>. 
+        /// Gets whether or not a wall is present in a given <see cref="Direction"/>.
         /// </summary>
-        public Dictionary<Direction, Wall> Walls { get; }
+        public Dictionary<Direction, bool> Walls { get; }
+
+        /// <summary>
+        /// Gets the cells in a given direction from this cell.
+        /// </summary>
+        public Dictionary<Direction, Cell> NeighboringCells { get; set; }
 
         /// <summary>
         /// Gets the X coordinate of this <see cref="Cell"/>.
@@ -32,12 +38,12 @@ namespace MazeGenAndPathFinding.Model.DataModels
         /// <param name="y">the Y coordinate of this <see cref="Cell"/>.</param>
         public Cell(int x, int y)
         {
-            Walls = new Dictionary<Direction, Wall>
+            Walls = new Dictionary<Direction, bool>
             {
-                { Direction.North, new Wall() },
-                { Direction.East, new Wall() },
-                { Direction.South, new Wall() },
-                { Direction.West, new Wall() },
+                {Direction.North, true},
+                {Direction.East, true},
+                {Direction.South, true},
+                {Direction.West, true}
             };
             X = x;
             Y = y;
@@ -53,7 +59,11 @@ namespace MazeGenAndPathFinding.Model.DataModels
         /// <param name="direction">The <see cref="Direction"/> to break the wall in.</param>
         public void BreakWall(Direction direction)
         {
-            Walls[direction].IsBroken = true;
+            Walls[direction] = false;
+            if (NeighboringCells.ContainsKey(direction))
+            {
+                NeighboringCells[direction].Walls[direction.GetOpposite()] = false;
+            }
         }
 
         #endregion

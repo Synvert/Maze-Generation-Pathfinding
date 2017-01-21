@@ -38,7 +38,7 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
             _visitedCells.Clear();
             _currentCell = GetRandomCell();
 
-            Maze.ResetAllInteriorWalls(false);
+            Maze.ResetAllInteriorWalls(true);
             RaiseCellsChangedEvent();
 
             _isGenerated = false;
@@ -65,7 +65,7 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
         public override bool Step()
         {
             _visitedCells.Add(_currentCell);
-            var neighboringCells = Maze.GetNeighboringCells(_currentCell)
+            var neighboringCells = _currentCell.NeighboringCells
                 .Where(x => !_visitedCells.Contains(x.Value))
                 .ToList();
             if (neighboringCells.Any())
