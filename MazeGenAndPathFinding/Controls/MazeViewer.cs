@@ -22,6 +22,12 @@ namespace MazeGenAndPathFinding.Controls
 
         private void OnMazeChanged(Maze oldValue, Maze newValue)
         {
+            if (!CheckAccess())
+            {
+                Dispatcher.Invoke(() => OnMazeChanged(oldValue, newValue));
+                return;
+            }
+
             if (oldValue != null)
             {
                 oldValue.CellsChanged -= MazeOnCellsChanged;
@@ -30,11 +36,17 @@ namespace MazeGenAndPathFinding.Controls
             {
                 newValue.CellsChanged += MazeOnCellsChanged;
             }
+
             InvalidateVisual();
         }
 
         private void MazeOnCellsChanged(object sender, EventArgs args)
         {
+            if(!CheckAccess())
+            {
+                Dispatcher.Invoke(() => MazeOnCellsChanged(sender, args));
+                return;
+            }
             InvalidateVisual();
         }
 

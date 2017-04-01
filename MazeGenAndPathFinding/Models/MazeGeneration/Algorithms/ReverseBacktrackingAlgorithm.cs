@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
@@ -11,7 +13,6 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
         private readonly Stack<Cell> _currentChain = new Stack<Cell>();
         private readonly HashSet<Cell> _visitedCells = new HashSet<Cell>();
         private Cell _currentCell;
-        private bool _isGenerated;
 
         #endregion
 
@@ -37,35 +38,51 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
             Maze.ResetAllInteriorWalls(true);
             RaiseCellsChangedEvent();
 
-            _isGenerated = false;
-        }
-
-        public override void GenerateMaze()
-        {
-            SuppressCellsChangedEvent = true;
-
-            if (_isGenerated)
-            {
-                Reset();
-            }
-            while (!_isGenerated)
-            {
-                Step();
-            }
-
-            SuppressCellsChangedEvent = false;
-
-            Maze.ResetCellColors(Colors.White);
-
-            RaiseCellsChangedEvent();
+            IsComplete = false;
         }
 
         public override void Step()
         {
+            Step(GetValidNeighboringCells(_currentCell));
+        }
+        
+        public override async Task RunAsync(CancellationToken cancellationToken)
+        {
+            var neighboringCells = GetValidNeighboringCells(_currentCell);
+            var initialValue = neighboringCells.Any();
+            do
+            {
+                Step(neighboringCells);
+                neighboringCells = _currentCell.NeighboringCells
+                    .Where(x => !_visitedCells.Contains(x.Value))
+                    .ToList();
+                await Task.Delay(50, cancellationToken);
+            } while (neighboringCells.Any() == initialValue && !IsComplete);
+        }
+
+        public override async Task RunToEndAsync(CancellationToken cancellationToken)
+        {
+            if (IsComplete)
+            {
+                Reset();
+            }
+            while (!IsComplete)
+            {
+                Step();
+                await Task.Delay(25, cancellationToken);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+            }
+
+            Maze.ResetCellColors(Colors.White);
+            RaiseCellsChangedEvent();
+        }
+
+        private void Step(IReadOnlyCollection<KeyValuePair<Direction, Cell>> neighboringCells)
+        {
             _visitedCells.Add(_currentCell);
-            var neighboringCells = _currentCell.NeighboringCells
-                .Where(x => !_visitedCells.Contains(x.Value))
-                .ToList();
             if (neighboringCells.Any())
             {
                 var randomNeighbor = neighboringCells.ElementAt(Random.Next(0, neighboringCells.Count));
@@ -83,11 +100,18 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
                 }
                 else
                 {
-                    _isGenerated = true;
+                    IsComplete = true;
                     Maze.ResetCellColors(Colors.White);
                 }
             }
             RaiseCellsChangedEvent();
+        }
+
+        private IReadOnlyCollection<KeyValuePair<Direction, Cell>> GetValidNeighboringCells(Cell cell)
+        {
+            return cell.NeighboringCells
+                .Where(x => !_visitedCells.Contains(x.Value))
+                .ToList();
         }
 
         private void SetCurrentCell(Cell cell)
@@ -95,7 +119,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
             _currentCell = cell;
             _currentCell.Background = Colors.LightCoral;
         }
-
+        
         #endregion
     }
 }

@@ -20,7 +20,7 @@
                      NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}">
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MetroFlatButton}">
-            <Setter Property="Width" Value="65"/>
+            <Setter Property="Width" Value="75"/>
             <Setter Property="Margin" Value="1"/>
             <Setter Property="Padding" Value="3 1"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -32,7 +32,7 @@
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="325"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -132,8 +132,11 @@
                         <Button Content="Step"
                                 Command="{Binding SelectedMazeGenerationAlgorithm.StepCommand}"
                                 Style="{StaticResource ButtonStyle}"/>
-                        <Button Content="Generate"
-                                Command="{Binding SelectedMazeGenerationAlgorithm.GenerateCommand}"
+                        <Button Content="Run"
+                                Command="{Binding SelectedMazeGenerationAlgorithm.RunCommand}"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button Content="Run To End"
+                                Command="{Binding SelectedMazeGenerationAlgorithm.RunToEndCommand}"
                                 Style="{StaticResource ButtonStyle}"/>
                     </StackPanel>
                 </Grid>

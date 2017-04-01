@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MazeGenAndPathFinding.Models.MazeGeneration
 {
@@ -8,7 +10,9 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
 
         public string Name { get; protected set; }
 
-        public Maze Maze { get; private set; }
+        public bool IsComplete { get; protected set; }
+
+        protected Maze Maze { get; private set; }
 
         #endregion
 
@@ -26,14 +30,17 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
         {
             Maze = maze;
             Reset();
+            IsComplete = false;
         }
 
         public abstract void Reset();
 
-        public abstract void GenerateMaze();
-
         public abstract void Step();
 
+        public abstract Task RunAsync(CancellationToken cancellationToken);
+
+        public abstract Task RunToEndAsync(CancellationToken cancellationToken);
+        
         protected Cell GetRandomCell()
         {
             var x = Random.Next(0, Maze.Width);
