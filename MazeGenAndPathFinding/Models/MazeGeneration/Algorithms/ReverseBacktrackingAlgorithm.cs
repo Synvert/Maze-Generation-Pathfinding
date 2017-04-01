@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MazeGenAndPathFinding.Model.DataModels;
 
-namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
+namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
 {
-    public class ReverseBacktracking : MazeGenerationAlgorithmBase
+    public class ReverseBacktrackingAlgorithm : MazeGenerationAlgorithmBase
     {
         #region Fields
 
@@ -17,7 +16,7 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
 
         #region Constructor
 
-        public ReverseBacktracking()
+        public ReverseBacktrackingAlgorithm()
         {
             Name = "Reverse Backtracking";
         }
@@ -25,13 +24,7 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration.Algorithms
         #endregion
 
         #region Methods
-
-        public override void Initialize(int height, int width)
-        {
-            base.Initialize(height, width);
-            _currentCell = GetRandomCell();
-        }
-
+        
         public override void Reset()
         {
             _currentChain.Clear();

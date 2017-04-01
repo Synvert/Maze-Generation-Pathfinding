@@ -1,21 +1,14 @@
 ﻿using System;
-using MazeGenAndPathFinding.Model.DataModels;
-using Prism.Mvvm;
 
-namespace MazeGenAndPathFinding.Model.MazeGeneration
+namespace MazeGenAndPathFinding.Models.MazeGeneration
 {
-    public abstract class MazeGenerationAlgorithmBase : BindableBase
+    public abstract class MazeGenerationAlgorithmBase
     {
         #region Properties
 
         public string Name { get; protected set; }
 
-        public Maze Maze
-        {
-            get { return _maze; }
-            protected set { SetProperty(ref _maze, value); }
-        }
-        private Maze _maze;
+        public Maze Maze { get; private set; }
 
         #endregion
 
@@ -29,9 +22,10 @@ namespace MazeGenAndPathFinding.Model.MazeGeneration
 
         #region Methods
 
-        public virtual void Initialize(int height, int width)
+        public void SetMaze(Maze maze)
         {
-            Maze = new Maze(height, width);
+            Maze = maze;
+            Reset();
         }
 
         public abstract void Reset();

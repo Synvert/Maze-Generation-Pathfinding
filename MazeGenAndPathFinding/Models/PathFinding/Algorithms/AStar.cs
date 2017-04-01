@@ -1,4 +1,4 @@
-﻿namespace MazeGenAndPathFinding.Model.PathFinding.Algorithms
+﻿namespace MazeGenAndPathFinding.Models.PathFinding.Algorithms
 {
     public class AStar : IPathFindingAlgorithm
     {

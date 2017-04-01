@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MazeGenAndPathFinding.Extensions;
 
-namespace MazeGenAndPathFinding.Model.DataModels
+namespace MazeGenAndPathFinding.Models
 {
     public class Cell
     {

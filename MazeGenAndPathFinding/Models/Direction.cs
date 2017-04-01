@@ -1,4 +1,4 @@
-﻿namespace MazeGenAndPathFinding.Model.DataModels
+﻿namespace MazeGenAndPathFinding.Models
 {
     public enum Direction
     {

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MazeGenAndPathFinding.Model.DataModels;
+using MazeGenAndPathFinding.Models;
 
 namespace MazeGenAndPathFinding.Controls
 {
@@ -74,13 +74,13 @@ namespace MazeGenAndPathFinding.Controls
         /// <param name="drawingContext">The drawing instructions for a specific element. This context is provided to the layout system.</param>
         protected override void OnRender(DrawingContext drawingContext)
         {
-            var cellWidth = ActualWidth/Maze.Width;
-            var cellHeight = ActualHeight/Maze.Height;
-            
             if (Maze == null)
             {
                 return;
             }
+
+            var cellWidth = ActualWidth / Maze.Width;
+            var cellHeight = ActualHeight / Maze.Height;
 
             // Draw outer walls manually because the method used for drawing interior walls leaves gaps.
             drawingContext.DrawLine(_linePen, new Point(0,0), new Point(ActualWidth, 0));

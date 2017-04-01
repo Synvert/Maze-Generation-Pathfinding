@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MazeGenAndPathFinding.Model.MazeGeneration;
-using MazeGenAndPathFinding.Model.MazeGeneration.Algorithms;
-using MazeGenAndPathFinding.Model.PathFinding;
-using MazeGenAndPathFinding.Model.PathFinding.Algorithms;
+using MazeGenAndPathFinding.Models;
+using MazeGenAndPathFinding.Models.PathFinding;
+using MazeGenAndPathFinding.Models.PathFinding.Algorithms;
+using MazeGenAndPathFinding.ViewModels.MazeGeneration;
+using MazeGenAndPathFinding.ViewModels.MazeGeneration.Algorithms;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -13,22 +14,22 @@ namespace MazeGenAndPathFinding.ViewModels
     {
         #region Properties
 
-        public IList<MazeGenerationAlgorithmBase> MazeGenerationAlgorithms { get; }
+        public IList<MazeGenerationAlgorithimViewModelBase> MazeGenerationAlgorithms { get; }
 
         public IList<IPathFindingAlgorithm> PathFindingAlgorithms { get; }
 
-        public MazeGenerationAlgorithmBase SelectedMazeGenerationAlgorithm
+        public MazeGenerationAlgorithimViewModelBase SelectedMazeGenerationAlgorithm
         {
             get { return _selectedMazeGenerationAlgorithm; }
             set
             {
                 if (SetProperty(ref _selectedMazeGenerationAlgorithm, value))
                 {
-                    value.Initialize(Width, Height);
+                    SelectedMazeGenerationAlgorithm.SetMaze(Maze);
                 }
             }
         }
-        private MazeGenerationAlgorithmBase _selectedMazeGenerationAlgorithm;
+        private MazeGenerationAlgorithimViewModelBase _selectedMazeGenerationAlgorithm;
 
         public IPathFindingAlgorithm SelectedPathFindingAlgorithm
         {
@@ -36,6 +37,13 @@ namespace MazeGenAndPathFinding.ViewModels
             set { SetProperty(ref _selectedPathFindingAlgorithm, value); }
         }
         private IPathFindingAlgorithm _selectedPathFindingAlgorithm;
+
+        public Maze Maze
+        {
+            get { return _maze; }
+            protected set { SetProperty(ref _maze, value); }
+        }
+        private Maze _maze;
 
         public int Width
         {
@@ -55,37 +63,15 @@ namespace MazeGenAndPathFinding.ViewModels
 
         #region Commands
 
-        #region	ResetMazeCommand
+        #region	ApplyGridSettingsCommand
 
-        public DelegateCommand ResetMazeCommand { get; }
+        public DelegateCommand ApplyGridSettingsCommand { get; }
 
-        private void OnResetMazeCommandExecuted()
+        private void OnApplyGridSettingsCommandExecuted()
         {
-            SelectedMazeGenerationAlgorithm.Initialize(Width, Height);
-            SelectedMazeGenerationAlgorithm.Reset();
-        }
-
-        #endregion
-
-        #region	StepMazeCommand
-
-        public DelegateCommand StepMazeCommand { get; }
-
-        private void OnStepMazeCommandExecuted()
-        {
-            _selectedMazeGenerationAlgorithm.Step();
-        }
-
-        #endregion
-
-        #region	GenerateMazeCommand
-
-        public DelegateCommand GenerateMazeCommand { get; }
-
-        private void OnGenerateMazeCommandExecuted()
-        {
-            SelectedMazeGenerationAlgorithm.Initialize(Width, Height);
-            SelectedMazeGenerationAlgorithm.GenerateMaze();
+            var maze = new Maze(Width, Height);
+            SelectedMazeGenerationAlgorithm.SetMaze(maze);
+            Maze = maze;
         }
 
         #endregion
@@ -96,23 +82,26 @@ namespace MazeGenAndPathFinding.ViewModels
 
         public MainViewModel()
         {
-            ResetMazeCommand = new DelegateCommand(OnResetMazeCommandExecuted);
-            StepMazeCommand = new DelegateCommand(OnStepMazeCommandExecuted);
-            GenerateMazeCommand = new DelegateCommand(OnGenerateMazeCommandExecuted);
+            ApplyGridSettingsCommand = new DelegateCommand(OnApplyGridSettingsCommandExecuted);
 
-            MazeGenerationAlgorithms = new List<MazeGenerationAlgorithmBase>
+            MazeGenerationAlgorithms = new List<MazeGenerationAlgorithimViewModelBase>
             {
-                new ReverseBacktracking()
+                new ReverseBacktrackingAlgorithmViewModel(),
             };
             PathFindingAlgorithms = new List<IPathFindingAlgorithm>
             {
                 new AStar()
             };
 
+            Maze = new Maze(Width, Height);
             SelectedMazeGenerationAlgorithm = MazeGenerationAlgorithms.First();
             SelectedPathFindingAlgorithm = PathFindingAlgorithms.First();
         }
 
+        #endregion
+
+        #region Methods
+        
         #endregion
     }
 }

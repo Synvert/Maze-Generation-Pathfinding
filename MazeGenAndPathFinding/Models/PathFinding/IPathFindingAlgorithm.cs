@@ -1,4 +1,4 @@
-﻿namespace MazeGenAndPathFinding.Model.PathFinding
+﻿namespace MazeGenAndPathFinding.Models.PathFinding
 {
     public interface IPathFindingAlgorithm
     {

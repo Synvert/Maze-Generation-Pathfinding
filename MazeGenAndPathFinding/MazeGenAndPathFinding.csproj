@@ -121,20 +121,22 @@
     </Compile>
     <Compile Include="Controls\MazeViewer.cs" />
     <Compile Include="Extensions\Extensions.cs" />
-    <Compile Include="Model\DataModels\Cell.cs" />
-    <Compile Include="Model\DataModels\Direction.cs" />
-    <Compile Include="Model\MazeGeneration\Algorithms\ReverseBacktracking.cs" />
-    <Compile Include="Model\MazeGeneration\MazeGenerationAlgorithmBase.cs" />
-    <Compile Include="Model\PathFinding\Algorithms\AStar.cs" />
-    <Compile Include="Model\PathFinding\IPathFindingAlgorithm.cs" />
+    <Compile Include="Models\Cell.cs" />
+    <Compile Include="Models\Direction.cs" />
+    <Compile Include="Models\MazeGeneration\Algorithms\ReverseBacktrackingAlgorithm.cs" />
+    <Compile Include="Models\MazeGeneration\MazeGenerationAlgorithmBase.cs" />
+    <Compile Include="Models\PathFinding\Algorithms\AStar.cs" />
+    <Compile Include="Models\PathFinding\IPathFindingAlgorithm.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MazeGeneration\Algorithms\ReverseBacktrackingAlgorithmViewModel.cs" />
+    <Compile Include="ViewModels\MazeGeneration\MazeGenerationAlgorithmViewModelBase.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\DataModels\Maze.cs" />
+    <Compile Include="Models\Maze.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

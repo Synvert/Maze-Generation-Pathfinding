@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using MazeGenAndPathFinding.Extensions;
 
-namespace MazeGenAndPathFinding.Model.DataModels
+namespace MazeGenAndPathFinding.Models
 {
     /// <summary>
     /// Represents a grid of <see cref="Cell"/>s.
@@ -28,8 +27,12 @@ namespace MazeGenAndPathFinding.Model.DataModels
 
         #endregion
 
+        #region Events
+        
         public event EventHandler CellsChanged;
 
+        #endregion
+        
         #region Constructor
 
         /// <summary>

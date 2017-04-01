@@ -12,127 +12,181 @@
         Title="Maze Generation and Path Finding"
         Height="600"
         Width="800"
+        MinHeight="200"
+        MinWidth="200"
         SnapsToDevicePixels="True">
+    <Window.Resources>
+        <Style x:Key="HeaderedGroupBoxStyle" TargetType="{x:Type GroupBox}">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupBox}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <DockPanel>
+                                <Border BorderThickness="0 0 0 1"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                        DockPanel.Dock="Top">
+                                    <TextBlock Text="{TemplateBinding Header}"
+                                               HorizontalAlignment="Center"
+                                               FontSize="14"/>
+                                </Border>
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Stretch"/>
+                            </DockPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="65"/>
+            <Setter Property="Margin" Value="1"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <!-- Side Bar -->
-        <TabControl Grid.Row="0"
-                    Margin="1">
-            <TabItem Header="Maze Generation">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    
-                    <Grid>
-                        <Grid.ColumnDefinitions>
+
+        <!-- Grid Settings -->
+        <GroupBox Header="Grid Settings" 
+                  Grid.Row="0"
+                  Margin="4 4 2 2"
+                  Style="{StaticResource HeaderedGroupBoxStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="Algorithm:"
+                    
+                    <TextBlock Text="Width:"
                                Grid.Column="0"
                                Grid.Row="0"
                                Margin="1"/>
-                        <ComboBox ItemsSource="{Binding MazeGenerationAlgorithms}"
-                              SelectedItem="{Binding SelectedMazeGenerationAlgorithm}"
-                              DisplayMemberPath="Name"
-                              Grid.Column="1"
-                              Grid.Row="0"
-                              Margin="1"/>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock Text="Width:"
-                                   Grid.Column="0"
-                                   Grid.Row="0"
-                                   Margin="1"/>
-                        <xctk:IntegerUpDown Value="{Binding Width}"
-                                            Minimum="3"
-                                            Grid.Column="1"
-                                            Grid.Row="0"
-                                            Margin="1"/>
-                        <TextBlock Text="Height:"
-                                   Grid.Column="2"
-                                   Grid.Row="0"
-                                   Margin="1"/>
-                        <xctk:IntegerUpDown Value="{Binding Height}"
-                                            Minimum="3"
-                                            Grid.Column="3"
-                                            Grid.Row="0"
-                                            Margin="1"/>
-                    </Grid>
-                    
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                Grid.Column="0"
-                                Grid.Row="3">
-                        <Button Content="Reset"
-                                Command="{Binding ResetMazeCommand}"
-                                HorizontalAlignment="Right"
-                                Margin="1"/>
-                        <Button Content="Step"
-                                Command="{Binding StepMazeCommand}"
-                                HorizontalAlignment="Right"
-                                Margin="1"/>
-                        <Button Content="Generate"
-                                Command="{Binding GenerateMazeCommand}"
-                                HorizontalAlignment="Right"
-                                Margin="1"/>
-                    </StackPanel>
+                    <xctk:IntegerUpDown Value="{Binding Width}"
+                                        Minimum="3"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        Margin="1"/>
+                    <TextBlock Text="Height:"
+                               Grid.Column="2"
+                               Grid.Row="0"
+                               Margin="1"/>
+                    <xctk:IntegerUpDown Value="{Binding Height}"
+                                        Minimum="3"
+                                        Grid.Column="3"
+                                        Grid.Row="0"
+                                        Margin="1"/>
                 </Grid>
-            </TabItem>
-        </TabControl>
+                
+                <Button Content="Apply"
+                        Command="{Binding ApplyGridSettingsCommand}"
+                        Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource ButtonStyle}"/>
+            </Grid>
+        </GroupBox>
         
-        <TabControl Grid.Column="0"
-                    Grid.Row="1"
-                    Margin="1">
-            <TabItem Header="Path Finding">
+        <!-- Maze Generation -->
+        <GroupBox Header="Maze Generation"
+                  Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="4 2 2 2"
+                  Style="{StaticResource HeaderedGroupBoxStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
                     
                     <TextBlock Text="Algorithm:"
+                               Grid.Column="0"
+                               Grid.Row="0"
                                Margin="1"/>
-                    <ComboBox ItemsSource="{Binding PathFindingAlgorithms}"
-                              SelectedItem="{Binding SelectedPathFindingAlgorithm}"
+                    <ComboBox ItemsSource="{Binding MazeGenerationAlgorithms}"
+                              SelectedItem="{Binding SelectedMazeGenerationAlgorithm}"
                               DisplayMemberPath="Name"
                               Grid.Column="1"
+                              Grid.Row="0"
                               Margin="1"/>
                 </Grid>
-            </TabItem>
-        </TabControl>
+                
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Grid.Column="0"
+                            Grid.Row="2">
+                    <Button Content="Reset"
+                            Command="{Binding SelectedMazeGenerationAlgorithm.ResetCommand}"
+                            Style="{StaticResource ButtonStyle}"/>
+                    <Button Content="Step"
+                            Command="{Binding SelectedMazeGenerationAlgorithm.StepCommand}"
+                            Style="{StaticResource ButtonStyle}"/>
+                    <Button Content="Generate"
+                            Command="{Binding SelectedMazeGenerationAlgorithm.GenerateCommand}"
+                            Style="{StaticResource ButtonStyle}"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
         
-        <!-- Maze Area -->
-
-        <controls:MazeViewer Maze="{Binding SelectedMazeGenerationAlgorithm.Maze}" 
+        <!-- Path Finding -->
+        <GroupBox Header="Path Finding"
+                  Grid.Column="0"
+                  Grid.Row="2"
+                  Margin="4 2 2 4"
+                  Style="{StaticResource HeaderedGroupBoxStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                
+                <TextBlock Text="Algorithm:"
+                           Margin="1"/>
+                <ComboBox ItemsSource="{Binding PathFindingAlgorithms}"
+                          SelectedItem="{Binding SelectedPathFindingAlgorithm}"
+                          DisplayMemberPath="Name"
+                          Grid.Column="1"
+                          Margin="1"/>
+            </Grid>
+        </GroupBox>
+        
+        <!-- Maze Display -->
+        <controls:MazeViewer Maze="{Binding Maze}" 
                              RenderOptions.EdgeMode="Aliased"
                              Grid.Column="1"
                              Grid.Row="0"
-                             Grid.RowSpan="2"
-                             Margin="3"/>
-        
+                             Grid.RowSpan="3"
+                             Margin="2 4 4 4"/>
     </Grid>
 </Window>

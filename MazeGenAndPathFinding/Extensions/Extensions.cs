@@ -1,4 +1,4 @@
-﻿using MazeGenAndPathFinding.Model.DataModels;
+﻿using MazeGenAndPathFinding.Models;
 
 namespace MazeGenAndPathFinding.Extensions
 {
