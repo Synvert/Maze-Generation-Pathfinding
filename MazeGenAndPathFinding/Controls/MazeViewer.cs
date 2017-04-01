@@ -45,7 +45,7 @@ namespace MazeGenAndPathFinding.Controls
         }
 
         #endregion
-
+        
         #endregion
 
         #region Fields
@@ -58,15 +58,15 @@ namespace MazeGenAndPathFinding.Controls
 
         public MazeViewer()
         {
-           _linePen = new Pen(new SolidColorBrush(Colors.Black), 1);
-           _linePen.Brush.Freeze();
-           _linePen.Freeze();
+            _linePen = new Pen(new SolidColorBrush(Colors.Black), 1);
+            _linePen.Brush.Freeze();
+            _linePen.Freeze();
         }
 
         #endregion
 
         #region Methods
-        
+
         /// <summary>
         /// When overridden in a derived class, participates in rendering operations that are directed by the layout system.
         /// The rendering instructions for this element are not used directly when this method is invoked, and are instead preserved for later asynchronous use by layout and drawing.
@@ -82,11 +82,13 @@ namespace MazeGenAndPathFinding.Controls
             var cellWidth = ActualWidth / Maze.Width;
             var cellHeight = ActualHeight / Maze.Height;
 
+            drawingContext.DrawRectangle(Background, null, new Rect(new Size(ActualWidth, ActualHeight)));
+
             // Draw outer walls manually because the method used for drawing interior walls leaves gaps.
-            drawingContext.DrawLine(_linePen, new Point(0,0), new Point(ActualWidth, 0));
+            drawingContext.DrawLine(_linePen, new Point(0, 0), new Point(ActualWidth, 0));
             drawingContext.DrawLine(_linePen, new Point(ActualWidth, 0), new Point(ActualWidth, ActualHeight));
             drawingContext.DrawLine(_linePen, new Point(ActualWidth, ActualHeight), new Point(0, ActualHeight));
-            drawingContext.DrawLine(_linePen, new Point(0, ActualHeight), new Point(0,0));
+            drawingContext.DrawLine(_linePen, new Point(0, ActualHeight), new Point(0, -1)); // The -1 is to close a small gap in the top left.
             
             foreach (var cell in Maze.EnumerateCellsWithUniqueWalls())
             {

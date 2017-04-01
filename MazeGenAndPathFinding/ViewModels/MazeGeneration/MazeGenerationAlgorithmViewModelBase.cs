@@ -1,5 +1,4 @@
-﻿using System;
-using MazeGenAndPathFinding.Models;
+﻿using MazeGenAndPathFinding.Models;
 using MazeGenAndPathFinding.Models.MazeGeneration;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -52,10 +51,6 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
         #endregion
 
         #region Fields
-
-        protected readonly Random Random = new Random();
-
-        protected bool SuppressCellsChangedEvent;
         
         protected MazeGenerationAlgorithmBase Algorithm;
         
