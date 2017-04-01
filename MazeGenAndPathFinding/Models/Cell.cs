@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media;
 using MazeGenAndPathFinding.Extensions;
 
 namespace MazeGenAndPathFinding.Models
@@ -27,6 +28,11 @@ namespace MazeGenAndPathFinding.Models
         /// </summary>
         public int Y { get; }
 
+        /// <summary>
+        /// Gets or Sets the background color of this <see cref="Cell"/>.
+        /// </summary>
+        public Color Background { get; set; }
+
         #endregion
 
         #region Constructor
@@ -47,6 +53,7 @@ namespace MazeGenAndPathFinding.Models
             };
             X = x;
             Y = y;
+            Background = Colors.Transparent;
         }
 
         #endregion

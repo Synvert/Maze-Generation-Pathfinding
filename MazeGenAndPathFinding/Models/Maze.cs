@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace MazeGenAndPathFinding.Models
 {
@@ -115,6 +116,14 @@ namespace MazeGenAndPathFinding.Models
                     var direction = neighboringCell.Key;
                     cell.Walls[direction] = value;
                 }
+            }
+        }
+
+        public void ResetCellColors(Color color)
+        {
+            foreach (var cell in Cells)
+            {
+                cell.Background = color;
             }
         }
 

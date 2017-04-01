@@ -83,13 +83,17 @@ namespace MazeGenAndPathFinding.Controls
             var cellHeight = ActualHeight / Maze.Height;
 
             drawingContext.DrawRectangle(Background, null, new Rect(new Size(ActualWidth, ActualHeight)));
-
-            // Draw outer walls manually because the method used for drawing interior walls leaves gaps.
-            drawingContext.DrawLine(_linePen, new Point(0, 0), new Point(ActualWidth, 0));
-            drawingContext.DrawLine(_linePen, new Point(ActualWidth, 0), new Point(ActualWidth, ActualHeight));
-            drawingContext.DrawLine(_linePen, new Point(ActualWidth, ActualHeight), new Point(0, ActualHeight));
-            drawingContext.DrawLine(_linePen, new Point(0, ActualHeight), new Point(0, -1)); // The -1 is to close a small gap in the top left.
             
+            foreach (var cell in Maze.Cells)
+            {
+                var topLeft = new Point(cellWidth * cell.X, cellHeight * cell.Y);
+                var bottomRight = new Point(cellWidth * cell.X + cellWidth, cellHeight * cell.Y + cellHeight);
+
+                var cellBackgroundBrush = new SolidColorBrush(cell.Background);
+                cellBackgroundBrush.Freeze();
+                drawingContext.DrawRectangle(cellBackgroundBrush, null, new Rect(topLeft, bottomRight));
+            }
+
             foreach (var cell in Maze.EnumerateCellsWithUniqueWalls())
             {
                 var topLeft = new Point(cellWidth * cell.X, cellHeight * cell.Y);
@@ -114,6 +118,12 @@ namespace MazeGenAndPathFinding.Controls
                     drawingContext.DrawLine(_linePen, bottomLeft, topLeft);
                 }
             }
+
+            // Draw outer walls manually because the method used for drawing interior walls leaves gaps.
+            drawingContext.DrawLine(_linePen, new Point(0, 0), new Point(ActualWidth, 0));
+            drawingContext.DrawLine(_linePen, new Point(ActualWidth, 0), new Point(ActualWidth, ActualHeight));
+            drawingContext.DrawLine(_linePen, new Point(ActualWidth, ActualHeight), new Point(0, ActualHeight));
+            drawingContext.DrawLine(_linePen, new Point(0, ActualHeight), new Point(0, -1)); // The -1 is to close a small gap in the top left.
         }
 
         #endregion

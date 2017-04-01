@@ -50,14 +50,14 @@ namespace MazeGenAndPathFinding.ViewModels
             get { return _width; }
             set { SetProperty(ref _width, value); }
         }
-        private int _width = 25;
+        private int _width = 10;
 
         public int Height
         {
             get { return _height; }
             set { SetProperty(ref _height, value); }
         }
-        private int _height = 25;
+        private int _height = 10;
 
         #endregion
 

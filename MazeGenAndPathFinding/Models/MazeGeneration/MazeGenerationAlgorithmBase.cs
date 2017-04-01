@@ -32,7 +32,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
 
         public abstract void GenerateMaze();
 
-        public abstract bool Step();
+        public abstract void Step();
 
         protected Cell GetRandomCell()
         {

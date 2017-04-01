@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 
 namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
 {
@@ -29,7 +30,9 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
         {
             _currentChain.Clear();
             _visitedCells.Clear();
-            _currentCell = GetRandomCell();
+
+            Maze.ResetCellColors(Colors.LightGray);
+            SetCurrentCell(GetRandomCell());
 
             Maze.ResetAllInteriorWalls(true);
             RaiseCellsChangedEvent();
@@ -45,17 +48,19 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
             {
                 Reset();
             }
-            while (!Step())
+            while (!_isGenerated)
             {
+                Step();
             }
 
             SuppressCellsChangedEvent = false;
 
+            Maze.ResetCellColors(Colors.White);
+
             RaiseCellsChangedEvent();
-            _isGenerated = true;
         }
 
-        public override bool Step()
+        public override void Step()
         {
             _visitedCells.Add(_currentCell);
             var neighboringCells = _currentCell.NeighboringCells
@@ -66,23 +71,29 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
                 var randomNeighbor = neighboringCells.ElementAt(Random.Next(0, neighboringCells.Count));
                 _currentCell.BreakWall(randomNeighbor.Key);
                 _currentChain.Push(_currentCell);
-                _currentCell = randomNeighbor.Value;
-                
-                RaiseCellsChangedEvent();
+                _currentCell.Background = Colors.LightBlue;
+                SetCurrentCell(randomNeighbor.Value);
             }
             else
             {
                 if (_currentChain.Any())
                 {
-                    _currentCell = _currentChain.Pop();
+                    _currentCell.Background = Colors.White;
+                    SetCurrentCell(_currentChain.Pop());
                 }
                 else
                 {
                     _isGenerated = true;
-                    return true;
+                    Maze.ResetCellColors(Colors.White);
                 }
             }
-            return false;
+            RaiseCellsChangedEvent();
+        }
+
+        private void SetCurrentCell(Cell cell)
+        {
+            _currentCell = cell;
+            _currentCell.Background = Colors.LightCoral;
         }
 
         #endregion
