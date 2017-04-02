@@ -57,7 +57,25 @@ namespace MazeGenAndPathFinding.Controls
         }
 
         #endregion
+
+        #region LockAspectRatio
+
+        public static readonly DependencyProperty LockAspectRatioProperty = DependencyProperty.Register(
+            "LockAspectRatio", typeof(bool), typeof(MazeViewer), new PropertyMetadata(default(bool), LockAspectRatioChangedCallback));
+
+        public bool LockAspectRatio
+        {
+            get { return (bool)GetValue(LockAspectRatioProperty); }
+            set { SetValue(LockAspectRatioProperty, value); }
+        }
+
+        private static void LockAspectRatioChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
+        {
+            ((MazeViewer)dependencyObject).InvalidateVisual();
+        }
         
+        #endregion
+
         #endregion
 
         #region Fields
@@ -93,6 +111,12 @@ namespace MazeGenAndPathFinding.Controls
 
             var cellWidth = ActualWidth / Maze.Width;
             var cellHeight = ActualHeight / Maze.Height;
+
+            if (LockAspectRatio)
+            {
+                cellWidth = Math.Min(cellWidth, cellHeight);
+                cellHeight = Math.Min(cellWidth, cellHeight);
+            }
 
             drawingContext.DrawRectangle(Background, null, new Rect(new Size(ActualWidth, ActualHeight)));
             
@@ -131,11 +155,14 @@ namespace MazeGenAndPathFinding.Controls
                 }
             }
 
+            var renderWidth = LockAspectRatio ? cellWidth * Maze.Width : ActualWidth;
+            var renderHeight = LockAspectRatio ? cellHeight * Maze.Height : ActualHeight;
+
             // Draw outer walls manually because the method used for drawing interior walls leaves gaps.
-            drawingContext.DrawLine(_linePen, new Point(0, 0), new Point(ActualWidth, 0));
-            drawingContext.DrawLine(_linePen, new Point(ActualWidth, 0), new Point(ActualWidth, ActualHeight));
-            drawingContext.DrawLine(_linePen, new Point(ActualWidth, ActualHeight), new Point(0, ActualHeight));
-            drawingContext.DrawLine(_linePen, new Point(0, ActualHeight), new Point(0, -1)); // The -1 is to close a small gap in the top left.
+            drawingContext.DrawLine(_linePen, new Point(0, 0), new Point(renderWidth, 0));
+            drawingContext.DrawLine(_linePen, new Point(renderWidth, 0), new Point(renderWidth, renderHeight));
+            drawingContext.DrawLine(_linePen, new Point(renderWidth, renderHeight), new Point(0, renderHeight));
+            drawingContext.DrawLine(_linePen, new Point(0, renderHeight), new Point(0, -1)); // The -1 is to close a small gap in the top left.
         }
 
         #endregion

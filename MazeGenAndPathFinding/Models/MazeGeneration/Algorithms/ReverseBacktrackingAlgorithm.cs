@@ -56,7 +56,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
                 neighboringCells = _currentCell.NeighboringCells
                     .Where(x => !_visitedCells.Contains(x.Value))
                     .ToList();
-                await Task.Delay(50, cancellationToken);
+                await Task.Delay(25, cancellationToken);
             } while (neighboringCells.Any() == initialValue && !IsComplete);
         }
 

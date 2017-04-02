@@ -7,6 +7,7 @@
                      xmlns:controls="clr-namespace:MazeGenAndPathFinding.Controls"
                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                      xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
+                     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                      mc:Ignorable="d"
                      d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
                      WindowStartupLocation="CenterScreen"
@@ -171,12 +172,49 @@
         </Border>
 
         <!-- Maze Display -->
-        <controls:MazeViewer Maze="{Binding Maze}" 
-                             Background="{StaticResource BackgroundBrush}"
-                             RenderOptions.EdgeMode="Aliased"
-                             Grid.Column="1"
-                             Grid.Row="0"
-                             Grid.RowSpan="3"
-                             Margin="2 4 4 4"/>
+        <DockPanel Grid.Column="1"
+                   Grid.Row="0"
+                   Grid.RowSpan="3"
+                   Margin="2 4 4 4">
+            <Border DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal">
+                    <ToggleButton IsChecked="{Binding ElementName=MazeViewer, Path=LockAspectRatio}"
+                                  Width="32"
+                                  Height="32">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=MazeViewer, Path=LockAspectRatio}" Value="False">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <iconPacks:PackIconMaterial Kind="LinkVariantOff" 
+                                                                            VerticalAlignment="Center" 
+                                                                            HorizontalAlignment="Center" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip" Value="Unlocked Aspect Ratio"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=MazeViewer, Path=LockAspectRatio}" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <iconPacks:PackIconMaterial Kind="LinkVariant" 
+                                                                            VerticalAlignment="Center" 
+                                                                            HorizontalAlignment="Center" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip" Value="Locked Aspect Ratio"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </StackPanel>
+            </Border>
+            <controls:MazeViewer x:Name="MazeViewer"
+                                 Maze="{Binding Maze}" 
+                                 RenderOptions.EdgeMode="Aliased"
+                                 Margin="0 4 0 0"/>
+        </DockPanel>
+        
     </Grid>
 </mahapps:MetroWindow>
