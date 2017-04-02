@@ -8,11 +8,11 @@ using Prism.Mvvm;
 
 namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
 {
-    public abstract class MazeGenerationAlgorithimViewModelBase : BindableBase
+    public class MazeGenerationAlgorithimViewModel : BindableBase
     {
         #region Properties
 
-        public string Name { get; protected set; }
+        public string Name => Algorithm.Name;
 
         private CancellationTokenSource CancellationTokenSource
         {
@@ -109,8 +109,9 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
 
         #region Constructor
 
-        protected MazeGenerationAlgorithimViewModelBase()
+        public MazeGenerationAlgorithimViewModel(MazeGenerationAlgorithmBase mazeGenerationAlgorithm)
         {
+            Algorithm = mazeGenerationAlgorithm;
             ResetCommand = new DelegateCommand(OnResetCommandExecuted);
             StepCommand = new DelegateCommand(OnStepCommandExecuted, CanStepCommandExecute);
             RunCommand = new DelegateCommand(OnRunCommandExecuted, CanRunCommandExecute);

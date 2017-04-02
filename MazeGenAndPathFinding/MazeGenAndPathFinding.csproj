@@ -115,8 +115,7 @@
     <Compile Include="Models\PathFinding\Algorithms\AStar.cs" />
     <Compile Include="Models\PathFinding\IPathFindingAlgorithm.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\MazeGeneration\Algorithms\ReverseBacktrackingAlgorithmViewModel.cs" />
-    <Compile Include="ViewModels\MazeGeneration\MazeGenerationAlgorithmViewModelBase.cs" />
+    <Compile Include="ViewModels\MazeGeneration\MazeGenerationAlgorithmViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
