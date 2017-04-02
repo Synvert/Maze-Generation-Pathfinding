@@ -110,6 +110,7 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Direction.cs" />
+    <Compile Include="Models\MazeGeneration\Algorithms\PrimsAlgorithm.cs" />
     <Compile Include="Models\MazeGeneration\Algorithms\ReverseBacktrackingAlgorithm.cs" />
     <Compile Include="Models\MazeGeneration\MazeGenerationAlgorithmBase.cs" />
     <Compile Include="Models\PathFinding\Algorithms\AStar.cs" />

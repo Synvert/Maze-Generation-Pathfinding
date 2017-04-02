@@ -29,20 +29,21 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
         
         public override void Reset()
         {
+            base.Reset();
             _currentChain.Clear();
             _visitedCells.Clear();
-
-            Maze.ResetCellColors(Colors.LightGray);
-            SetCurrentCell(GetRandomCell());
-
-            Maze.ResetAllInteriorWalls(true);
-            RaiseCellsChangedEvent();
-
-            IsComplete = false;
         }
 
         public override void Step()
         {
+            if (!IsInitialized)
+            {
+                SetCurrentCell(GetRandomCell());
+                Maze.OnCellsChanged();
+                IsInitialized = true;
+                return;
+            }
+
             Step(GetValidNeighboringCells(_currentCell));
         }
         
@@ -77,7 +78,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
             }
 
             Maze.ResetCellColors(Colors.White);
-            RaiseCellsChangedEvent();
+            Maze.OnCellsChanged();
         }
 
         private void Step(IReadOnlyCollection<KeyValuePair<Direction, Cell>> neighboringCells)
@@ -101,10 +102,9 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
                 else
                 {
                     IsComplete = true;
-                    Maze.ResetCellColors(Colors.White);
                 }
             }
-            RaiseCellsChangedEvent();
+            Maze.OnCellsChanged();
         }
 
         private IReadOnlyCollection<KeyValuePair<Direction, Cell>> GetValidNeighboringCells(Cell cell)

@@ -23,9 +23,12 @@ namespace MazeGenAndPathFinding.ViewModels
             get { return _selectedMazeGenerationAlgorithm; }
             set
             {
-                if (SetProperty(ref _selectedMazeGenerationAlgorithm, value))
+                if (_selectedMazeGenerationAlgorithm != value)
                 {
-                    SelectedMazeGenerationAlgorithm.SetMaze(Maze);
+                    _selectedMazeGenerationAlgorithm?.Cancel();
+                    _selectedMazeGenerationAlgorithm = value;
+                    _selectedMazeGenerationAlgorithm.SetMaze(Maze);
+                    OnPropertyChanged(nameof(SelectedMazeGenerationAlgorithm));
                 }
             }
         }
@@ -86,6 +89,7 @@ namespace MazeGenAndPathFinding.ViewModels
 
             MazeGenerationAlgorithms = new List<MazeGenerationAlgorithimViewModel>
             {
+                new MazeGenerationAlgorithimViewModel(new PrimsAlgorithm()),
                 new MazeGenerationAlgorithimViewModel(new ReverseBacktrackingAlgorithm()),
             };
             PathFindingAlgorithms = new List<IPathFindingAlgorithm>

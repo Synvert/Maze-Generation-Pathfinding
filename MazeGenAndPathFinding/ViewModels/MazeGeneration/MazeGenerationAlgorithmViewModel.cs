@@ -78,7 +78,7 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
 
         private bool CanRunCommandExecute()
         {
-            return _cancellationTokenSource == null && !Algorithm.IsComplete;
+            return _cancellationTokenSource == null && !Algorithm.IsComplete && Algorithm.IsRunAvailable;
         }
 
         #endregion
@@ -126,6 +126,13 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
         {
             CancellationTokenSource = null;
             Algorithm.SetMaze(maze);
+        }
+
+        public void Cancel()
+        {
+            _cancellationTokenSource?.Cancel();
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
         }
 
         private void RunAsyncFunc(Func<CancellationToken, Task> func)

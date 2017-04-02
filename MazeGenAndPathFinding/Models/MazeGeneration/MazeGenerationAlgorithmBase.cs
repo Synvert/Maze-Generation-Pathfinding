@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MazeGenAndPathFinding.Models.MazeGeneration
 {
@@ -10,17 +11,15 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
 
         public string Name { get; protected set; }
 
+        public bool IsRunAvailable { get; protected set; }
+
         public bool IsComplete { get; protected set; }
 
+        protected bool IsInitialized { get; set; }
+        
         protected Maze Maze { get; private set; }
 
-        #endregion
-
-        #region Fields
-
-        protected readonly Random Random = new Random();
-
-        protected bool SuppressCellsChangedEvent;
+        protected Random Random { get; } = new Random();
 
         #endregion
 
@@ -33,11 +32,21 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
             IsComplete = false;
         }
 
-        public abstract void Reset();
+        public virtual void Reset()
+        {
+            Maze.ResetCellColors(Colors.LightGray);
+            Maze.ResetAllInteriorWalls(true);
+            Maze.OnCellsChanged();
+            IsComplete = false;
+            IsInitialized = false;
+        }
 
         public abstract void Step();
 
-        public abstract Task RunAsync(CancellationToken cancellationToken);
+        public virtual Task RunAsync(CancellationToken cancellationToken)
+        {
+            return Task.FromResult(0);
+        }
 
         public abstract Task RunToEndAsync(CancellationToken cancellationToken);
         
@@ -47,15 +56,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
             var y = Random.Next(0, Maze.Height);
             return Maze.Cells[x, y];
         }
-
-        protected void RaiseCellsChangedEvent()
-        {
-            if (!SuppressCellsChangedEvent)
-            {
-                Maze.OnCellsChanged();
-            }
-        }
-
+        
         #endregion
     }
 }
