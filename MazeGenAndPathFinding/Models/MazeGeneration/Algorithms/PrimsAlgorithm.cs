@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media;
-using MazeGenAndPathFinding.Extensions;
 
 namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
 {
@@ -64,15 +61,6 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
                 IsComplete = true;
             }
             Maze.OnCellsChanged();
-        }
-
-        public override async Task RunToEndAsync(CancellationToken cancellationToken)
-        {
-            while (!IsComplete)
-            {
-                Step();
-                await Task.Delay(25, cancellationToken);
-            }
         }
 
         private void IncorporateCell(Cell cell)

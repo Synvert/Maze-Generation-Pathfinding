@@ -61,26 +61,6 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
             } while (neighboringCells.Any() == initialValue && !IsComplete);
         }
 
-        public override async Task RunToEndAsync(CancellationToken cancellationToken)
-        {
-            if (IsComplete)
-            {
-                Reset();
-            }
-            while (!IsComplete)
-            {
-                Step();
-                await Task.Delay(25, cancellationToken);
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-            }
-
-            Maze.ResetCellColors(Colors.White);
-            Maze.OnCellsChanged();
-        }
-
         private void Step(IReadOnlyCollection<KeyValuePair<Direction, Cell>> neighboringCells)
         {
             _visitedCells.Add(_currentCell);
@@ -94,9 +74,9 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
             }
             else
             {
+                _currentCell.Background = Colors.White;
                 if (_currentChain.Any())
                 {
-                    _currentCell.Background = Colors.White;
                     SetCurrentCell(_currentChain.Pop());
                 }
                 else

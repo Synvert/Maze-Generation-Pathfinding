@@ -11,7 +11,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
 
         public string Name { get; protected set; }
 
-        public bool IsRunAvailable { get; protected set; }
+        public bool IsRunAvailable { get; protected set; } = true;
 
         public bool IsComplete { get; protected set; }
 
@@ -48,7 +48,14 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
             return Task.FromResult(0);
         }
 
-        public abstract Task RunToEndAsync(CancellationToken cancellationToken);
+        public virtual async Task RunToEndAsync(CancellationToken cancellationToken)
+        {
+            while (!IsComplete)
+            {
+                Step();
+                await Task.Delay(25, cancellationToken);
+            }
+        }
         
         protected Cell GetRandomCell()
         {
