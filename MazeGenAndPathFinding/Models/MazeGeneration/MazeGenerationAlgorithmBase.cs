@@ -53,7 +53,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
             while (!IsComplete)
             {
                 Step();
-                await Task.Delay(25, cancellationToken);
+                await Task.Delay(16, cancellationToken);
             }
         }
         

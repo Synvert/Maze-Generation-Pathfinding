@@ -140,7 +140,15 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
             CancellationTokenSource = new CancellationTokenSource();
             Task.Run(async () =>
             {
-                await func(CancellationTokenSource.Token);
+                try
+                {
+                    await func(CancellationTokenSource.Token);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
                 CancellationTokenSource = null;
             });
         }

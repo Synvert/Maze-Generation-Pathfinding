@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -81,6 +82,7 @@ namespace MazeGenAndPathFinding.Controls
         #region Fields
 
         private readonly Pen _linePen;
+        private readonly Dictionary<Color, SolidColorBrush> _brushCache = new Dictionary<Color, SolidColorBrush>();
 
         #endregion
 
@@ -88,7 +90,7 @@ namespace MazeGenAndPathFinding.Controls
 
         public MazeViewer()
         {
-            _linePen = new Pen(new SolidColorBrush(Colors.Black), 1);
+            _linePen = new Pen(GetBrush(Colors.Black), 1);
             _linePen.Brush.Freeze();
             _linePen.Freeze();
         }
@@ -124,10 +126,8 @@ namespace MazeGenAndPathFinding.Controls
             {
                 var topLeft = new Point(cellWidth * cell.X, cellHeight * cell.Y);
                 var bottomRight = new Point(cellWidth * cell.X + cellWidth, cellHeight * cell.Y + cellHeight);
-
-                var cellBackgroundBrush = new SolidColorBrush(cell.Background);
-                cellBackgroundBrush.Freeze();
-                drawingContext.DrawRectangle(cellBackgroundBrush, null, new Rect(topLeft, bottomRight));
+                
+                drawingContext.DrawRectangle(GetBrush(cell.Background), null, new Rect(topLeft, bottomRight));
             }
 
             foreach (var cell in Maze.EnumerateCellsWithUniqueWalls())
@@ -163,6 +163,19 @@ namespace MazeGenAndPathFinding.Controls
             drawingContext.DrawLine(_linePen, new Point(renderWidth, 0), new Point(renderWidth, renderHeight));
             drawingContext.DrawLine(_linePen, new Point(renderWidth, renderHeight), new Point(0, renderHeight));
             drawingContext.DrawLine(_linePen, new Point(0, renderHeight), new Point(0, -1)); // The -1 is to close a small gap in the top left.
+        }
+
+        private SolidColorBrush GetBrush(Color color)
+        {
+            if (_brushCache.ContainsKey(color))
+            {
+                return _brushCache[color];
+            }
+
+            var brush = new SolidColorBrush(color);
+            brush.Freeze();
+            _brushCache[color] = brush;
+            return brush;
         }
 
         #endregion

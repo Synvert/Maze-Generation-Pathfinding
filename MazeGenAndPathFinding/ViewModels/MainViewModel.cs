@@ -89,6 +89,7 @@ namespace MazeGenAndPathFinding.ViewModels
 
             MazeGenerationAlgorithms = new List<MazeGenerationAlgorithimViewModel>
             {
+                new MazeGenerationAlgorithimViewModel(new EllersAlgorithm()),
                 new MazeGenerationAlgorithimViewModel(new PrimsAlgorithm()),
                 new MazeGenerationAlgorithimViewModel(new ReverseBacktrackingAlgorithm()),
             };
