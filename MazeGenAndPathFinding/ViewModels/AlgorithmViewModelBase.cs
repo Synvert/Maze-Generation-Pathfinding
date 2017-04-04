@@ -2,19 +2,20 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MazeGenAndPathFinding.Models;
-using MazeGenAndPathFinding.Models.MazeGeneration;
 using Prism.Commands;
 using Prism.Mvvm;
 
-namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
+namespace MazeGenAndPathFinding.ViewModels
 {
-    public class MazeGenerationAlgorithimViewModel : BindableBase
+    public class AlgorithmViewModelBase : BindableBase
     {
         #region Properties
 
         public string Name => Algorithm.Name;
 
-        private CancellationTokenSource CancellationTokenSource
+        protected AlgorithmBase Algorithm { get; }
+
+        protected CancellationTokenSource CancellationTokenSource
         {
             get { return _cancellationTokenSource; }
             set
@@ -101,17 +102,12 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
 
         #endregion
 
-        #region Fields
-
-        protected MazeGenerationAlgorithmBase Algorithm;
-        
-        #endregion
-
         #region Constructor
-
-        public MazeGenerationAlgorithimViewModel(MazeGenerationAlgorithmBase mazeGenerationAlgorithm)
+        
+        public AlgorithmViewModelBase(AlgorithmBase algorithm)
         {
-            Algorithm = mazeGenerationAlgorithm;
+            Algorithm = algorithm;
+
             ResetCommand = new DelegateCommand(OnResetCommandExecuted);
             StepCommand = new DelegateCommand(OnStepCommandExecuted, CanStepCommandExecute);
             RunCommand = new DelegateCommand(OnRunCommandExecuted, CanRunCommandExecute);
@@ -121,12 +117,6 @@ namespace MazeGenAndPathFinding.ViewModels.MazeGeneration
         #endregion
 
         #region Methods
-
-        public void SetMaze(Maze maze)
-        {
-            CancellationTokenSource = null;
-            Algorithm.SetMaze(maze);
-        }
 
         public void Cancel()
         {

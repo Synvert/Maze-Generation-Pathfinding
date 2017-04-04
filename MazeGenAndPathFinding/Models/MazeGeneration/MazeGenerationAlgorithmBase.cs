@@ -1,26 +1,15 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace MazeGenAndPathFinding.Models.MazeGeneration
 {
-    public abstract class MazeGenerationAlgorithmBase
+    public abstract class MazeGenerationAlgorithmBase : AlgorithmBase
     {
         #region Properties
-
-        public string Name { get; protected set; }
-
-        public bool IsRunAvailable { get; protected set; } = true;
-
-        public bool IsComplete { get; protected set; }
-
+        
         protected bool IsInitialized { get; set; }
         
         protected Maze Maze { get; private set; }
-
-        protected Random Random { get; } = new Random();
-
+        
         #endregion
 
         #region Methods
@@ -32,29 +21,13 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration
             IsComplete = false;
         }
 
-        public virtual void Reset()
+        public override void Reset()
         {
             Maze.ResetCellColors(Colors.LightGray);
             Maze.ResetAllInteriorWalls(true);
             Maze.OnCellsChanged();
             IsComplete = false;
             IsInitialized = false;
-        }
-
-        public abstract void Step();
-
-        public virtual Task RunAsync(CancellationToken cancellationToken)
-        {
-            return Task.FromResult(0);
-        }
-
-        public virtual async Task RunToEndAsync(CancellationToken cancellationToken)
-        {
-            while (!IsComplete)
-            {
-                Step();
-                await Task.Delay(16, cancellationToken);
-            }
         }
         
         protected Cell GetRandomCell()

@@ -114,6 +114,7 @@
                         <TextBlock Text="Algorithm:"
                                    Grid.Column="0"
                                    Grid.Row="0"
+                                   VerticalAlignment="Center"
                                    Margin="1"/>
                         <ComboBox ItemsSource="{Binding MazeGenerationAlgorithms}"
                                   SelectedItem="{Binding SelectedMazeGenerationAlgorithm}"
@@ -152,21 +153,49 @@
             <GroupBox Header="Path Finding"
                       Margin="0">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                    
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
-                    <TextBlock Text="Algorithm:"
-                               Margin="1"/>
-                    <ComboBox ItemsSource="{Binding PathFindingAlgorithms}"
-                              SelectedItem="{Binding SelectedPathFindingAlgorithm}"
-                              DisplayMemberPath="Name"
-                              Grid.Column="1"
-                              Margin="1"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="Algorithm:"
+                                   Grid.Column="0"
+                                   Grid.Row="0" 
+                                   VerticalAlignment="Center"
+                                   Margin="1"/>
+                        <ComboBox ItemsSource="{Binding PathFindingAlgorithms}"
+                                  SelectedItem="{Binding SelectedPathFindingAlgorithm}"
+                                  DisplayMemberPath="Name"
+                                  Grid.Column="1"
+                                  Grid.Row="0"
+                                  Margin="1"/>
+                    </Grid>
+                    
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Grid.Row="2">
+                        <Button Content="Reset"
+                                Command="{Binding SelectedPathFindingAlgorithm.ResetCommand}"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button Content="Step"
+                                Command="{Binding SelectedPathFindingAlgorithm.StepCommand}"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button Content="Run"
+                                Command="{Binding SelectedPathFindingAlgorithm.RunCommand}"
+                                Style="{StaticResource ButtonStyle}"/>
+                        <Button Content="Run To End"
+                                Command="{Binding SelectedPathFindingAlgorithm.RunToEndCommand}"
+                                Style="{StaticResource ButtonStyle}"/>
+                    </StackPanel>
                 </Grid>
             </GroupBox>
         </Border>

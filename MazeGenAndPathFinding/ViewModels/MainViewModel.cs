@@ -2,9 +2,6 @@
 using System.Linq;
 using MazeGenAndPathFinding.Models;
 using MazeGenAndPathFinding.Models.MazeGeneration.Algorithms;
-using MazeGenAndPathFinding.Models.PathFinding;
-using MazeGenAndPathFinding.Models.PathFinding.Algorithms;
-using MazeGenAndPathFinding.ViewModels.MazeGeneration;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -16,7 +13,7 @@ namespace MazeGenAndPathFinding.ViewModels
 
         public IList<MazeGenerationAlgorithimViewModel> MazeGenerationAlgorithms { get; }
 
-        public IList<IPathFindingAlgorithm> PathFindingAlgorithms { get; }
+        public IList<PathFindingAlgorithmViewModel> PathFindingAlgorithms { get; }
 
         public MazeGenerationAlgorithimViewModel SelectedMazeGenerationAlgorithm
         {
@@ -34,12 +31,12 @@ namespace MazeGenAndPathFinding.ViewModels
         }
         private MazeGenerationAlgorithimViewModel _selectedMazeGenerationAlgorithm;
 
-        public IPathFindingAlgorithm SelectedPathFindingAlgorithm
+        public PathFindingAlgorithmViewModel SelectedPathFindingAlgorithm
         {
             get { return _selectedPathFindingAlgorithm; }
             set { SetProperty(ref _selectedPathFindingAlgorithm, value); }
         }
-        private IPathFindingAlgorithm _selectedPathFindingAlgorithm;
+        private PathFindingAlgorithmViewModel _selectedPathFindingAlgorithm;
 
         public Maze Maze
         {
@@ -93,9 +90,9 @@ namespace MazeGenAndPathFinding.ViewModels
                 new MazeGenerationAlgorithimViewModel(new PrimsAlgorithm()),
                 new MazeGenerationAlgorithimViewModel(new ReverseBacktrackingAlgorithm()),
             };
-            PathFindingAlgorithms = new List<IPathFindingAlgorithm>
+            PathFindingAlgorithms = new List<PathFindingAlgorithmViewModel>
             {
-                new AStar()
+                new PathFindingAlgorithmViewModel(new Models.PathFinding.Algorithms.ReverseBacktrackingAlgorithm())
             };
 
             Maze = new Maze(Width, Height);
