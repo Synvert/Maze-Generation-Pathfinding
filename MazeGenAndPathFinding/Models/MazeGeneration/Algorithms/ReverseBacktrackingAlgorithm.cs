@@ -38,9 +38,7 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
         {
             if (!IsInitialized)
             {
-                SetCurrentCell(GetRandomCell());
-                Maze.OnCellsChanged();
-                IsInitialized = true;
+                Initialize();
                 return;
             }
 
@@ -49,6 +47,11 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
         
         public override async Task RunAsync(CancellationToken cancellationToken)
         {
+            if (!IsInitialized)
+            {
+                Initialize();
+            }
+
             var neighboringCells = GetValidNeighboringCells(_currentCell);
             var initialValue = neighboringCells.Any();
             do
@@ -98,6 +101,13 @@ namespace MazeGenAndPathFinding.Models.MazeGeneration.Algorithms
         {
             _currentCell = cell;
             _currentCell.Background = Colors.LightCoral;
+        }
+
+        private void Initialize()
+        {
+            SetCurrentCell(GetRandomCell());
+            Maze.OnCellsChanged();
+            IsInitialized = true;
         }
         
         #endregion
